@@ -1,0 +1,984 @@
+<title>Blobsquatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Rubik:wght@400;500;600;700&family=VT323&display=swap">
+<style>
+/* Layout: a night-forest stage up top (the meme), then a dictionary card, the trail-cam "Closer" meter, the game, the Stash, numbers and how to buy. One night palette; hot pink is Blobsquatch, mint means NEAR, amber is camera light. */
+:root{
+  --night:#0C1A1C; --panel:#13282A; --line:#2B4A46; --fog:#E8F0EA; --muted:#9FB8B0;
+  --pink:#FF6FB1; --pink-deep:#D94E8E; --pink-ink:#2B0D1C; --amber:#FFC65C; --near:#2EE6A6; --shadow:#030809;
+  --display:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:"Rubik","Trebuchet MS",system-ui,sans-serif;
+  --cam:"VT323",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--night);color:var(--fog);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:0 64px;display:grid;gap:44px}
+header.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--night);padding-block:12px;border-bottom:2px solid var(--line)}
+.logo{font-family:var(--display);font-size:30px;letter-spacing:.5px;line-height:1;white-space:nowrap}
+.logo .b{color:var(--pink);filter:blur(1.4px)}
+.logo .s{color:var(--pink)}
+.logo small{font-family:var(--cam);font-size:18px;color:var(--muted);margin-left:8px;letter-spacing:.5px}
+.links{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.lnk{color:var(--fog);font-weight:600;text-decoration:none;border-bottom:2px solid transparent}
+.lnk:hover,.lnk:focus-visible{border-bottom-color:var(--pink);outline:none}
+.soon{color:var(--muted);font-weight:500;font-size:15px}
+.btn,button{display:inline-block;font-family:var(--display);font-size:18px;letter-spacing:.3px;color:var(--pink-ink);background:var(--pink);border:3px solid var(--pink-ink);border-radius:14px;padding:7px 16px;text-decoration:none;box-shadow:4px 4px 0 var(--shadow);cursor:pointer;transition:transform .08s}
+.btn.ghost,button.ghost{background:transparent;color:var(--fog);border-color:var(--fog)}
+.btn:active,button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow)}
+.btn:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.btn .full{display:inline}
+@media (max-width:560px){.logo{font-size:23px}.logo small{display:none}.links{gap:10px;flex-wrap:nowrap}.topbar .btn{font-size:15px;padding:4px 10px;box-shadow:3px 3px 0 var(--shadow)}.topbar .btn .full{display:none}.soon{display:none}}
+section{scroll-margin-top:80px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,8vw,84px);line-height:1;margin:22px 0 0;text-wrap:balance}
+h1 .blur{color:var(--pink);filter:blur(3px)}
+h1 em{font-style:normal;color:var(--night);background:var(--near);padding:0 .14em;border-radius:.18em}
+.lede{font-size:19px;max-width:58ch;margin:12px 0 0;color:var(--fog)}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,5vw,46px);margin:0 0 6px;line-height:1.05;text-wrap:balance}
+.sub{margin:0 0 16px;max-width:62ch;color:var(--muted)}
+.note{font-size:14px;color:var(--muted);margin:12px 0 0}
+.stagebox{display:grid;gap:12px}
+.stage{position:relative;border:3px solid var(--line);border-radius:24px;overflow:hidden;aspect-ratio:16/10;max-width:100%;background:#0A1430;box-shadow:8px 8px 0 var(--shadow)}
+.stage canvas{display:block;width:100%;height:100%}
+.banner{position:absolute;left:50%;top:5%;transform:translateX(-50%) rotate(-3deg);font-family:var(--display);font-size:clamp(20px,4.4vw,40px);color:var(--night);background:var(--near);border:3px solid var(--shadow);border-radius:12px;padding:2px 14px;white-space:nowrap}
+.stagebtn{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);white-space:nowrap;font-size:clamp(16px,3vw,22px)}
+.stagebtn:active{transform:translate(calc(-50% + 3px),3px)}
+.go{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.snapBox{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);display:grid;justify-items:center;gap:6px;width:max-content;max-width:92%}
+.snapBox button{font-size:clamp(16px,3vw,22px)}
+@media (max-width:520px){.snapBox{bottom:3%;gap:3px}.snapBox button{font-size:14px;padding:3px 12px;box-shadow:3px 3px 0 var(--shadow)}.snapBox small{font-size:10px!important;padding:2px 8px!important}}
+.snapBox small{background:rgba(4,10,14,.78);color:var(--fog);border-radius:999px;padding:3px 10px;font-size:clamp(11px,1.7vw,14px);text-align:center}
+.mintPol{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px);background:rgba(4,10,14,.45);padding-inline:16px;text-align:center}
+.mintPol .gtext b{font-family:var(--display);font-weight:400;font-size:clamp(20px,5vw,44px);color:var(--pink);line-height:1}
+.polaroid.big canvas{width:clamp(110px,26vw,240px)}
+.polaroid.big span{max-width:clamp(110px,26vw,240px)}
+.develop{animation:develop 3.2s ease-out both}
+@keyframes develop{0%{filter:brightness(2.2) saturate(0) blur(6px);opacity:.35}60%{filter:brightness(1.2) saturate(.6) blur(1px);opacity:.9}100%{filter:none;opacity:1}}
+.panel{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;gap:8px;min-width:0;align-content:start}
+.panel b.t{font-family:var(--display);font-weight:400;font-size:22px;color:var(--pink)}
+.status{font-weight:600;color:var(--amber);min-height:1.5em}
+.preview label{font-weight:600}
+.preview output{font-variant-numeric:tabular-nums;color:var(--near)}
+.preview input{width:100%;accent-color:var(--pink)}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.duo{grid-template-columns:1fr}}
+.dict{background:var(--fog);color:var(--pink-ink);border-radius:18px;padding:22px 24px;display:grid;gap:6px;max-width:720px;box-shadow:8px 8px 0 var(--shadow)}
+.dict .word{font-family:var(--display);font-size:clamp(30px,5vw,44px);line-height:1}
+.dict .word .b{filter:blur(2px)}
+.dict .pron{font-family:var(--cam);font-size:22px;color:#5B4A52}
+.dict .pos{font-style:italic;font-weight:600;color:#5B4A52}
+.dict p{margin:0;font-size:19px}
+.dict .ex{font-style:italic;color:#5B4A52}
+.closer{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.closer{grid-template-columns:1fr}}
+.cam{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:16/10;max-width:100%;background:#0A1430;border:3px solid var(--line)}
+.cam canvas{display:block;width:100%;height:100%}
+.camui{position:absolute;inset:0;pointer-events:none;font-family:var(--cam);font-size:clamp(15px,2.4vw,22px);color:#F4F4EC;text-shadow:0 0 4px rgba(0,0,0,.8);letter-spacing:.5px}
+.camui .tl{position:absolute;top:8px;left:12px}
+.camui .tr{position:absolute;top:8px;right:12px}
+.camui .bl{position:absolute;bottom:8px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.rec{color:#FF4D4D}
+.big{font-family:var(--display);font-size:clamp(28px,4vw,38px);line-height:1.1;font-variant-numeric:tabular-nums}
+.big span{color:var(--pink)}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:600;font-variant-numeric:tabular-nums}
+.bar{height:16px;border:2px solid var(--line);border-radius:999px;background:var(--night);overflow:hidden}
+.bar i{display:block;height:100%;width:2%;background:var(--pink)}
+.rules{margin:0;padding-left:20px;display:grid;gap:4px}
+.controls{display:flex;gap:10px;flex-wrap:wrap}
+.controls button{font-size:15px;padding:5px 12px;box-shadow:3px 3px 0 var(--shadow)}
+.tag{font-family:var(--cam);font-size:18px;color:var(--amber)}
+.gamebox{position:relative;border:3px solid var(--line);border-radius:22px;overflow:hidden;aspect-ratio:16/10;max-width:100%;background:#06101A;box-shadow:8px 8px 0 var(--shadow);touch-action:none;user-select:none;-webkit-user-select:none}
+.gamebox:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+.gamebox canvas{display:block;width:100%;height:100%}
+.gover{position:absolute;inset:0;display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:clamp(10px,3vw,24px);text-align:center;background:rgba(4,10,14,.62);padding-inline:16px}
+.gover{z-index:2}
+.gtext{display:grid;justify-items:center;gap:clamp(4px,1.2vw,10px);max-width:420px;min-width:0}
+.gamebox.playing canvas{cursor:none}
+.polaroid{background:#F6F3EA;padding:8px 8px 6px;box-shadow:0 8px 24px rgba(0,0,0,.5);transform:rotate(-3deg);display:grid;gap:4px;justify-items:center}
+.polaroid canvas{width:clamp(72px,20vw,170px);height:auto;aspect-ratio:1;display:block}
+.polaroid span{font-family:var(--cam);font-size:clamp(11px,1.8vw,18px);max-width:clamp(72px,20vw,170px);line-height:1.1;color:#2A2A2A;font-weight:400}
+.gover b{font-family:var(--display);font-weight:400;font-size:clamp(20px,6vw,54px);color:var(--pink);line-height:1}
+.gtext span{font-weight:600;font-size:clamp(12px,2.4vw,19px)}
+@media (max-width:480px){.gtext button{font-size:15px;padding:4px 12px}}
+.ghud{position:absolute;top:8px;left:14px;right:14px;display:flex;flex-wrap:wrap;gap:0 14px;justify-content:space-between;font-family:var(--cam);font-size:clamp(14px,2.4vw,22px);font-variant-numeric:tabular-nums;pointer-events:none}
+.ghud b{font-weight:400;color:var(--amber);margin-left:4px}
+.gkeys{position:absolute;left:0;right:0;bottom:8px;display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-family:var(--cam);font-size:clamp(15px,2.4vw,20px);color:rgba(232,240,234,.55);pointer-events:none}
+.wallet{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.wallet button{font-size:16px}
+.wallet span{font-weight:600;min-width:0}
+ol.plain{margin:0;padding-left:22px;display:grid;gap:6px}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:820px){.nums{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.nums{grid-template-columns:1fr}}
+.nums.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:640px){.nums.three{grid-template-columns:1fr}}
+.modes{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--muted);font-size:15px;margin-top:10px}
+.modes .chip{font-family:var(--body);font-weight:600;font-size:15px;padding:4px 14px;border-radius:999px;background:transparent;color:var(--fog);border:2px solid var(--line);box-shadow:none}
+.modes .chip[aria-pressed="true"]{background:var(--pink);color:var(--pink-ink);border-color:var(--pink-ink)}
+.num{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
+.num span{font-family:var(--cam);font-size:19px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.num b{font-family:var(--display);font-weight:400;font-size:26px;color:var(--pink)}
+.num p{margin:4px 0 0;font-size:15px}
+.ca{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:14px}
+.ca .lbl{font-family:var(--cam);font-size:19px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.ca code{font-size:15px;overflow-wrap:anywhere;flex:1;min-width:0}
+.ca button{font-size:15px;padding:4px 12px;box-shadow:none}
+.notes{display:grid;gap:10px}
+.empty{border:2px dashed var(--line);border-radius:14px;padding:14px 16px;color:var(--muted)}
+footer{font-size:14px;color:var(--muted);max-width:74ch;display:grid;gap:10px}
+footer p{margin:0}
+.defn{margin:14px 0 0;font-size:17px;color:var(--muted)}
+.defn b{font-family:var(--display);font-weight:400;font-size:22px;color:var(--fog)}
+.defn .b{filter:blur(1.6px)}
+.defn .pron{font-family:var(--cam);font-size:19px}
+.cachip{max-width:560px}
+.stagenote{margin:0;color:var(--muted)}
+.stagenote a{color:var(--pink)}
+.pols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-block:8px 4px}
+@media (max-width:760px){.pols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.polaroid.ex{margin:0;transform:rotate(-2deg)}
+.polaroid.ex:nth-child(2){transform:rotate(1.5deg)}
+.polaroid.ex:nth-child(3){transform:rotate(-1deg)}
+.polaroid.ex:nth-child(4){transform:rotate(2.5deg)}
+.polaroid.ex canvas{width:100%;height:auto;aspect-ratio:1}
+.polaroid.ex figcaption{font-family:var(--cam);font-size:16px;color:#2A2A2A;text-align:center;line-height:1.15;white-space:pre-line}
+.split{margin:0;padding-left:20px;display:grid;gap:6px;align-content:start}
+.buysteps{margin-top:18px}
+details.preview{border:1px dashed var(--line);border-radius:12px;padding:8px 12px}
+details.preview summary{cursor:pointer;color:var(--muted)}
+details.preview input{width:100%;accent-color:var(--pink)}
+
+@media (prefers-reduced-motion:reduce){.go{animation:none}.btn,button{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="logo"><span class="b">BLOB</span><span class="s">SQUATCH</span><small>on NEAR</small></div>
+    <nav class="links" aria-label="Blobsquatch links">
+      <a class="btn" href="#buy">Buy<span class="full"> $BLOBSQUATCH</span></a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Nobody's gotten a <span class="blur">clear picture</span>. Yet.</h1>
+    <p class="defn"><b><span class="b">blob</span>·squatch</b> <span class="pron">/ˈblɑbˌskwɑtʃ/</span> <i>noun.</i> A blurry photo someone swears is Bigfoot.</p>
+    <p class="lede">Every photo of Blobsquatch is a pink blur. Barry has been trying to get a clear shot since 1967. Go squatching with him.</p>
+    <div class="ctas"><a class="btn" href="#buy">Buy $BLOBSQUATCH</a><a class="btn ghost" href="#game">Play Snap the Squatch</a></div>
+    <div class="ca cachip"><span class="lbl">Contract</span><code id="caTop">Posted at launch</code><button class="copyBtn" data-target="caTop">Copy</button></div>
+  </section>
+
+  <section class="stagebox" id="spot">
+    <div class="stage" id="stage">
+      <canvas id="c" aria-label="Barry the Squatcher sneaks up on Blobsquatch in a night forest"></canvas>
+      <div class="banner" id="banner" hidden></div>
+      <button class="stagebtn go" id="goBtn" hidden>Go Squatching</button>
+      <a class="btn stagebtn" id="wake" href="#buy" hidden>Wake Barry up</a>
+      <div class="snapBox" id="snapBox" hidden><button id="snapBtn">Snap a pic</button><small>Mints your Blobsquatch NFT · 3 NEAR · free if you hold 1M+ $BLOBSQUATCH</small></div>
+      <div class="mintPol" id="mintPol" hidden>
+        <div class="polaroid big"><canvas id="nftCv" width="360" height="360" aria-label="Your Blobsquatch NFT photo"></canvas><span id="nftCap"></span></div>
+        <div class="gtext"><b id="nftTitle">Still developing.</b><span id="nftMsg"></span><button id="backWoods">Back to the woods</button></div>
+      </div>
+    </div>
+    <p class="stagenote">Going squatching is free. Snapping a pic mints your Blobsquatch NFT, and it develops later. <a href="#nft">How the NFTs work</a></p>
+    <div class="modes" id="preview" role="group" aria-label="Preview the chart modes"><span>Preview the chart:</span><button class="chip" data-pct="0" aria-pressed="true">Normal</button><button class="chip" data-pct="5" aria-pressed="false">Pumping</button><button class="chip" data-pct="-5" aria-pressed="false">Dumping</button></div>
+    <p class="note">At launch the scene follows the real $BLOBSQUATCH chart. Up 2% in the last hour, they both lose it. Down 2%, Blobsquatch hides and Barry dozes off.</p>
+    <p class="status" id="claimStatus" role="status"></p>
+  </section>
+
+  <section id="nft">
+    <h2>1,967 Polaroids. One per wallet.</h2>
+    <p class="sub">Every Blobsquatch NFT is a photo from your own sighting, and there's more than one blobsquatch out there. Fur, tuft, size, expression, pose, setting and film are picked when you mint, so no two shots are the same.</p>
+    <div class="pols" aria-label="Example Blobsquatch NFTs">
+      <figure class="polaroid ex"><canvas width="300" height="300"></canvas><figcaption></figcaption></figure>
+      <figure class="polaroid ex"><canvas width="300" height="300"></canvas><figcaption></figcaption></figure>
+      <figure class="polaroid ex"><canvas width="300" height="300"></canvas><figcaption></figcaption></figure>
+      <figure class="polaroid ex"><canvas width="300" height="300"></canvas><figcaption></figcaption></figure>
+    </div>
+    <p class="note">Every Polaroid stays undeveloped until the reveal. Nobody's gotten a clear picture. Yet.</p>
+    <div class="duo">
+      <div class="panel">
+        <b class="t">How to get one</b>
+        <ol class="plain">
+          <li>Tap <b>Go Squatching</b>. It's free.</li>
+          <li>When you're close, tap <b>Snap a pic</b> and approve the mint in your NEAR wallet.</li>
+          <li>Your Polaroid starts developing. That's your NFT.</li>
+        </ol>
+        <ul class="rules">
+          <li><b>3 NEAR</b>, or free if your wallet holds 1,000,000+ $BLOBSQUATCH.</li>
+          <li>One per wallet. 1,967 in total.</li>
+          <li>Polaroids develop when all 1,967 are minted, or on the reveal date, whichever comes first.</li>
+          <li>Before the mint opens, we post a fingerprint of the final art (a provenance hash), so nobody can rig who gets the rare ones.</li>
+          <li>#352 is a one of one, "Frame 352," named for the film's famous look-back frame.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <b class="t">Where your 3 NEAR goes</b>
+        <ul class="split">
+          <li><b>1 NEAR</b> buys $BLOBSQUATCH on the open market and burns it.</li>
+          <li><b>1 NEAR</b> goes to the Squatcher Stash.</li>
+          <li><b>1 NEAR</b> goes to the creator.</li>
+        </ul>
+        <p class="note" style="margin:0">Resales pay a 3% royalty: 1% buys and burns $BLOBSQUATCH, 1% goes to the Squatcher Stash and 1% to the creator. Every burn is posted in Field notes with its transaction.</p>
+        <p class="note" style="margin:0">Traits: fur, tuft, expression, size, pose, setting and film, plus a very rare, completely blurry "true blobsquatch."</p>
+      </div>
+    </div>
+    <div class="ctas"><a class="btn" href="#spot">Go Squatching</a></div>
+  </section>
+
+  <section id="game">
+    <h2>Snap the Squatch</h2>
+    <p class="sub">Blobsquatch are hiding in the trees, and there's more than one. Keep one in your crosshair until the focus ring locks, then snap. Far shots pay the most but take the longest to focus. Snap too soon and all you get is a blobsquatch. Don't photograph bears. Or Barry.</p>
+    <div class="gamebox" id="gameBox" tabindex="0" aria-label="Snap the Squatch game. Move to aim and click to take a photo. On a phone, hold to focus and let go to snap. Arrow keys aim and space snaps.">
+      <canvas id="gcv"></canvas>
+      <div class="gover" id="gOver">
+        <div class="polaroid" id="pol" hidden><canvas id="polCv" width="360" height="360"></canvas><span id="polCap"></span></div>
+        <div class="gtext">
+          <b id="gTitle">Snap the Squatch</b>
+          <span id="gMsg">Hover to focus, click to snap. On a phone, hold to focus and let go to snap.</span>
+          <button id="gPlay">Play</button>
+        </div>
+      </div>
+      <div class="ghud"><span>RND <b id="gRound">1</b> · SEEN <b id="gSight">0/10</b> · CLEAR <b id="gClear">0/4</b></span><span>FILM <b id="gFilm">▮▮▮</b> · SCORE <b id="gScore">0</b> · BEST <b id="gBest">0</b></span></div>
+    </div>
+    <div class="wallet">
+      <button class="ghost" id="wConnect">Connect NEAR wallet</button>
+      <span id="wStatus">Connect a NEAR wallet to log your scores.</span>
+    </div>
+    <p class="note">Any future airdrop would go to wallets that also hold $BLOBSQUATCH. Nothing is promised.</p>
+  </section>
+
+  <section id="stash">
+    <h2>Squatcher Stash</h2>
+    <p class="sub">The community's fund. It starts with 1% of the supply, and it collects 1 NEAR from every NFT mint plus 1% of every NFT resale.</p>
+    <div class="nums three" aria-label="Receipts">
+      <div class="num"><span>Raised from mints</span><b id="rRaised">0 NEAR</b><p>Every paid mint, counted from the chain.</p></div>
+      <div class="num"><span>Burned</span><b id="rBurned">0</b><p>$BLOBSQUATCH bought on the open market and burned.</p></div>
+      <div class="num"><span>Stash balance</span><b id="rStash">0 NEAR</b><p>What the Squatcher Stash holds right now.</p></div>
+    </div>
+    <p class="note">Receipts go live at launch and update from the chain.</p>
+    <div class="duo">
+      <div class="panel">
+        <b class="t">What it pays for</b>
+        <ul class="rules">
+          <li>Prizes for top Snap the Squatch players.</li>
+          <li>Marketing and contests.</li>
+          <li>Art for new NFT traits and seasons.</li>
+        </ul>
+        <p class="note" style="margin:0">Down the road, Blobsquatch might get a say in how it's spent.</p>
+      </div>
+      <div class="panel notes">
+        <b class="t">Field notes</b>
+        <div class="empty">Every Stash payment and every burn gets logged here with a link to the transaction. The first entry lands at launch.</div>
+      </div>
+    </div>
+    <div class="ca"><span class="lbl">Stash wallet</span><code id="stashAddr">Posted at launch</code><button class="copyBtn" data-target="stashAddr">Copy</button></div>
+  </section>
+
+  <section id="buy">
+    <h2>Get $BLOBSQUATCH</h2>
+    <div class="nums">
+      <div class="num"><span>Total supply</span><b>1 billion</b><p>1,000,000,000 $BLOBSQUATCH. No more can ever be made, and every NFT mint burns some.</p></div>
+      <div class="num"><span>Airdrop</span><b>Coming</b><p>A share of the supply goes to active NEAR wallets. The size and snapshot are posted before launch.</p></div>
+      <div class="num"><span>Liquidity</span><b>Locked</b><p>Launch liquidity goes into a NEAR pool and the LP is locked. No presale, and 0% buy or sell tax.</p></div>
+      <div class="num"><span>Team</span><b>5%, locked</b><p>It unlocks on a public schedule, so you can see every token before it moves. A separate 1% seeds the Squatcher Stash.</p></div>
+    </div>
+    <ol class="plain buysteps">
+      <li>Get a NEAR wallet, like Meteor, HOT, or MyNearWallet.</li>
+      <li>Buy some NEAR and send it to your wallet.</li>
+      <li>Open the Blobsquatch launch, or paste the contract into a NEAR swap. Links go up at launch.</li>
+      <li>Swap for $BLOBSQUATCH. You're a Squatcher.</li>
+    </ol>
+    <div class="ca"><span class="lbl">Contract</span><code id="ca">Posted at launch</code><button class="copyBtn" data-target="ca">Copy</button></div>
+    <div class="ca"><span class="lbl">Team wallet</span><code id="dev">Posted at launch</code><button class="copyBtn" data-target="dev">Copy</button></div>
+  </section>
+
+  <footer>
+    <p>$BLOBSQUATCH is a meme token for fun, with no intrinsic value and no expectation of financial return. Not financial advice. Blobsquatch is a fan of NEAR and isn't affiliated with or endorsed by the NEAR Foundation.</p>
+    <p>No clear photos of Bigfoot were taken in the making of this site.</p>
+  </footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DPRx=()=>Math.min(1.5,devicePixelRatio||1);
+const lerp=(a,b,k)=>a+(b-a)*k;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const sm=x=>.5-.5*Math.cos(Math.PI*clamp(x,0,1));
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const FONT_D='"Bagel Fat One", sans-serif';
+
+/* ---------- characters ---------- */
+const P={pink:'#FF6FB1',deep:'#D94E8E',light:'#FFA9CF',face:'#FFD3E5',eye:'#1C0A13',ink:'#2B0D1C'};
+const FUR=(()=>{let s=3;const r=()=>(s=(s*16807)%2147483647)/2147483647;const a=[];for(let i=0;i<320;i++)a.push({e:i<200?0:1,a:r()*Math.PI*2,l:.012+r()*.03,s:r()});return a})();
+const FIB=(()=>{let s=9;const r=()=>(s=(s*16807)%2147483647)/2147483647;const a=[];for(let i=0;i<70;i++){const x=r()*2-1,y=r()*2-1;if(x*x+y*y<.8)a.push({x,y,a:r()*Math.PI,l:.015+r()*.025})}return a})();
+
+// Blobsquatch, feet at (0,0), h tall, facing us (or away with o.back)
+function squatch(g,h,t,o){
+  o=o||{};const bob=o.bob||0;
+  g.save();g.lineCap='round';g.lineJoin='round';
+  const fx=o.splay?.33:.15;
+  const up=d=>(o.lift==='L'&&d<0)||(o.lift==='R'&&d>0)?-h*.11:0;
+  g.fillStyle=P.deep;for(const d of [-1,1]){g.beginPath();g.ellipse(d*h*fx,-h*.035+up(d),h*.105,h*.045,0,0,7);g.fill()}
+  g.fillStyle=P.pink;for(const d of [-1,1]){g.beginPath();g.ellipse(d*h*(o.splay?.2:.12),-h*.12+up(d)*.6,h*.09,h*.1,0,0,7);g.fill()}
+  const bodyY=-h*.43+bob,headY=-h*.8+bob,tilt=o.tilt||0;
+  g.translate(0,bodyY);g.rotate(tilt);g.translate(0,-bodyY);
+  // arms behind the body when walking away
+  const sh=bodyY-h*.16;
+  const arm=(d,hx,hy)=>{g.strokeStyle=P.pink;g.lineWidth=h*.12;g.beginPath();g.moveTo(d*h*.22,sh);g.quadraticCurveTo(d*h*.38,(sh+hy)/2,hx,hy);g.stroke();g.fillStyle=P.deep;g.beginPath();g.arc(hx,hy,h*.062,0,7);g.fill()};
+  const arms=()=>{
+    if(o.arms==='wave'){arm(-1,-h*.36,-h*.2+bob);const w=Math.sin(t*9)*h*.06;arm(1,h*.42+w,headY-h*.12)}
+    else if(o.arms==='dance'){const a=Math.sin(t*o.sp);arm(-1,-h*(.42+.06*a),headY-h*(.1+.12*a));arm(1,h*(.42-.06*a),headY-h*(.1-.12*a))}
+    else if(o.arms==='up'){arm(-1,-h*.4,headY-h*.18);arm(1,h*.4,headY-h*.18)}
+    else if(o.arms!=='none'){const sw=Math.sin(t*5)*h*.03*(o.walk?1:0);arm(-1,-h*.36,-h*.2+bob+sw);arm(1,h*.36,-h*.2+bob-sw)}
+  };
+  g.fillStyle=P.pink;
+  g.beginPath();g.ellipse(0,bodyY,h*.3,h*.34,0,0,7);g.fill();
+  g.beginPath();g.ellipse(0,headY,h*.21,h*.2,0,0,7);g.fill();
+  g.beginPath();g.ellipse(0,headY-h*.16,h*.1,h*.08,0,0,7);g.fill();
+  // fur strands around the outline
+  g.lineWidth=Math.max(.8,h*.009);
+  for(const pass of [0,1]){g.strokeStyle=pass?P.deep:P.pink;g.beginPath();
+    for(const f of FUR){if((f.s>.55)!==!!pass)continue;const sn=Math.sin(f.a);if(f.e===0&&sn<-.65)continue;if(f.e===1&&sn>.6)continue;
+      const cy=f.e?headY:bodyY,rx=f.e?h*.21:h*.3,ry=f.e?h*.2:h*.34,a=f.a+Math.sin(t*4+f.s*20)*.06;
+      g.moveTo(Math.cos(f.a)*rx*.86,cy+sn*ry*.86);g.lineTo(Math.cos(a)*(rx+h*f.l),cy+Math.sin(a)*(ry+h*f.l))}
+    g.stroke()}
+  // felt fibers
+  g.strokeStyle='rgba(255,190,220,.55)';g.lineWidth=Math.max(.7,h*.008);g.beginPath();
+  for(const f of FIB){const x=f.x*h*.24,y=bodyY+f.y*h*.28;g.moveTo(x,y);g.lineTo(x+Math.cos(f.a)*h*f.l,y+Math.sin(f.a)*h*f.l)}g.stroke();
+  if(!o.back){g.fillStyle='rgba(255,169,207,.55)';g.beginPath();g.ellipse(0,bodyY+h*.06,h*.17,h*.2,0,0,7);g.fill()}
+  arms();
+  if(o.back){
+    const gl=o.glance||0,sd=o.gside||1;
+    if(gl>0){ // looking back over his shoulder: cheek, one eye and nose turn into view
+      g.fillStyle=P.face;g.beginPath();g.ellipse(sd*h*.11*gl,headY+h*.04,h*(.015+.075*gl),h*.11,0,0,7);g.fill();
+      const ex=sd*h*.12*gl,er=h*.03*gl;g.fillStyle=P.eye;g.beginPath();g.arc(ex,headY,er,0,7);g.fill();
+      g.fillStyle='#fff';g.beginPath();g.arc(ex+sd*er*.35,headY-er*.35,er*.33,0,7);g.fill();
+      g.strokeStyle=P.deep;g.lineWidth=Math.max(1,h*.014);g.beginPath();g.moveTo(ex-sd*h*.03,headY-h*.055);g.lineTo(ex+sd*h*.03,headY-h*.06);g.stroke();
+      g.fillStyle=P.deep;g.beginPath();g.ellipse(sd*h*.185*gl,headY+h*.06,h*.022,h*.016,0,0,7);g.fill();
+    }else{ // tuft on the back of the head
+      g.strokeStyle=P.deep;g.lineWidth=Math.max(1,h*.02);g.beginPath();for(let i=-2;i<=2;i++){g.moveTo(i*h*.03,headY-h*.12);g.lineTo(i*h*.04,headY-h*.24)}g.stroke()}
+    g.restore();return}
+  // face
+  g.fillStyle=P.face;g.beginPath();g.ellipse(0,headY+h*.035,h*.145,h*.13,0,0,7);g.fill();
+  const er=h*.033,ey=headY+h*.005;
+  for(const d of [-1,1]){g.fillStyle=P.eye;g.beginPath();g.arc(d*h*.058,ey,er,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(d*h*.058+er*.35,ey-er*.35,er*.33,0,7);g.fill()}
+  g.strokeStyle=P.deep;g.lineWidth=Math.max(1,h*.014);g.beginPath();
+  for(const d of [-1,1]){g.moveTo(d*h*.035,ey-h*.055);g.lineTo(d*h*.085,ey-h*.06)}g.stroke();
+  g.fillStyle=P.deep;g.beginPath();g.ellipse(0,headY+h*.06,h*.024,h*.016,0,0,7);g.fill();
+  g.strokeStyle=P.eye;g.lineWidth=Math.max(1,h*.012);
+  if(o.happy){g.fillStyle=P.eye;g.beginPath();g.ellipse(0,headY+h*.105,h*.04,h*.03,0,0,Math.PI);g.fill()}
+  else{g.beginPath();g.arc(0,headY+h*.075,h*.04,.35,Math.PI-.35);g.stroke()}
+  g.restore();
+}
+
+const Q={hat:'#C9B27C',band:'#6E5F3B',skin:'#E3AE86',skin2:'#C98F68',jacket:'#55673A',jacket2:'#45542F',plaid:'#E3A93C',pants:'#7E6E52',boot:'#2A221B',ink:'#0B1112',cam:'#1A1D1F',lens:'#5A8796',chair:'#2F6B5A',metal:'#8C979A'};
+function rr(g,x,y,w,h,r){g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,r);else g.rect(x,y,w,h)}
+function camera(g,x,y,s){ // centered at x,y, faces right
+  g.fillStyle=Q.cam;rr(g,x-s*.6,y-s*.4,s*1.2,s*.8,s*.12);g.fill();
+  g.fillStyle='#2B2F31';rr(g,x-s*.35,y-s*.58,s*.45,s*.2,s*.05);g.fill();
+  g.fillStyle=Q.cam;g.beginPath();g.arc(x+s*.62,y,s*.32,0,7);g.fill();
+  g.fillStyle=Q.lens;g.beginPath();g.arc(x+s*.62,y,s*.2,0,7);g.fill();
+  g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.arc(x+s*.56,y-s*.07,s*.06,0,7);g.fill();
+}
+// The Squatcher, feet at (0,0), h tall, facing right. mood: squint | watch | elated | frenzy | sleep
+function squatcher(g,h,t,mood){
+  g.save();g.lineCap='round';g.lineJoin='round';
+  if(mood==='sleep'){sleeper(g,h,t);g.restore();return}
+  const jump=mood==='elated'&&!reduce?Math.abs(Math.sin(t*7))*h*.05:0;
+  const jit=mood==='frenzy'&&!reduce?Math.sin(t*45)*h*.006:0;
+  g.translate(jit,-jump);
+  // legs + boots
+  g.strokeStyle=Q.pants;g.lineWidth=h*.085;g.beginPath();g.moveTo(-h*.045,-h*.44);g.lineTo(-h*.07,-h*.05);g.moveTo(h*.045,-h*.44);g.lineTo(h*.08,-h*.05);g.stroke();
+  g.fillStyle=Q.boot;for(const x of [-h*.07,h*.08]){g.beginPath();g.ellipse(x+h*.03,-h*.03,h*.07,h*.035,0,0,7);g.fill()}
+  g.translate(0,-h*.44);g.rotate(mood==='squint'?.12:mood==='elated'?-.05:0);
+  const hy=-h*.49;
+  // back arm
+  const armL=(sx,sy,ex,ey,hx,hy2)=>{g.strokeStyle=Q.jacket2;g.lineWidth=h*.07;g.beginPath();g.moveTo(sx,sy);g.quadraticCurveTo(ex,ey,hx,hy2);g.stroke();g.fillStyle=Q.skin;g.beginPath();g.arc(hx,hy2,h*.035,0,7);g.fill()};
+  if(mood==='elated')armL(-h*.08,-h*.34,-h*.2,-h*.5,-h*.16,hy-h*.2);
+  else if(mood==='frenzy'||mood==='aim')armL(-h*.06,-h*.33,h*.05,-h*.32,h*.12,hy+h*.06);
+  else armL(-h*.08,-h*.32,-h*.12,-h*.18,-h*.06,-h*.07);
+  // torso
+  g.fillStyle=Q.jacket;rr(g,-h*.13,-h*.4,h*.26,h*.42,h*.08);g.fill();
+  g.fillStyle=Q.plaid;g.beginPath();g.moveTo(-h*.05,-h*.4);g.lineTo(h*.06,-h*.4);g.lineTo(h*.005,-h*.3);g.closePath();g.fill();
+  g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=Math.max(1,h*.008);g.beginPath();g.moveTo(h*.005,-h*.3);g.lineTo(h*.005,0);g.stroke();
+  g.fillStyle=Q.jacket2;rr(g,h*.03,-h*.2,h*.07,h*.06,h*.015);g.fill();
+  // camera strap + camera at chest unless it's up
+  if(mood==='watch'||mood==='squint'){g.strokeStyle='#222';g.lineWidth=Math.max(1,h*.01);g.beginPath();g.moveTo(-h*.06,-h*.4);g.lineTo(h*.02,-h*.17);g.lineTo(h*.08,-h*.4);g.stroke();camera(g,h*.06,-h*.15,h*.075)}
+  // head
+  g.fillStyle=Q.skin;g.beginPath();g.arc(h*.01,hy,h*.095,0,7);g.fill();
+  g.beginPath();g.arc(h*.1,hy+h*.012,h*.024,0,7);g.fill();
+  g.fillStyle=Q.skin2;g.beginPath();g.arc(-h*.035,hy+h*.01,h*.022,0,7);g.fill();
+  // stubble
+  g.fillStyle='rgba(90,60,40,.25)';g.beginPath();g.ellipse(h*.04,hy+h*.06,h*.07,h*.035,0,0,7);g.fill();
+  // hat
+  g.fillStyle=Q.hat;rr(g,-h*.085,hy-h*.15,h*.19,h*.11,h*.045);g.fill();
+  g.beginPath();g.ellipse(h*.012,hy-h*.045,h*.165,h*.032,-.04,0,7);g.fill();
+  g.fillStyle=Q.band;g.fillRect(-h*.085,hy-h*.075,h*.19,h*.02);
+  // face
+  const ex=h*.058,ey=hy-h*.005;
+  g.strokeStyle=Q.ink;g.fillStyle=Q.ink;g.lineWidth=Math.max(1.2,h*.012);
+  if(mood==='squint'){
+    g.beginPath();g.moveTo(ex-h*.022,ey);g.lineTo(ex+h*.022,ey+h*.004);g.stroke();
+    g.beginPath();g.moveTo(ex-h*.03,ey-h*.03);g.lineTo(ex+h*.03,ey-h*.016);g.stroke();
+    g.beginPath();g.moveTo(h*.05,hy+h*.055);g.lineTo(h*.085,hy+h*.05);g.stroke();
+  }else if(mood==='elated'){
+    g.fillStyle='#fff';g.beginPath();g.arc(ex,ey,h*.024,0,7);g.fill();g.fillStyle=Q.ink;g.beginPath();g.arc(ex+h*.006,ey,h*.012,0,7);g.fill();
+    g.beginPath();g.arc(ex,ey-h*.03,h*.026,Math.PI*1.1,Math.PI*1.9);g.stroke();
+    g.fillStyle='#3A1410';g.beginPath();g.ellipse(h*.066,hy+h*.055,h*.026,h*.034,0,0,7);g.fill();
+  }else if(mood==='frenzy'||mood==='aim'){
+    g.fillStyle='#3A1410';g.beginPath();g.arc(h*.06,hy+h*.05,h*.03,0,Math.PI);g.fill();
+  }else{
+    g.beginPath();g.arc(ex,ey,h*.012,0,7);g.fill();
+    g.beginPath();g.moveTo(ex-h*.025,ey-h*.028);g.lineTo(ex+h*.025,ey-h*.03);g.stroke();
+    g.beginPath();g.arc(h*.065,hy+h*.035,h*.02,.2,Math.PI-.4);g.stroke();
+  }
+  // front arm
+  const armR=(ex2,ey2,hx,hy2)=>{g.strokeStyle=Q.jacket;g.lineWidth=h*.075;g.beginPath();g.moveTo(h*.07,-h*.34);g.quadraticCurveTo(ex2,ey2,hx,hy2);g.stroke();g.fillStyle=Q.skin;g.beginPath();g.arc(hx,hy2,h*.037,0,7);g.fill()};
+  if(mood==='squint'){armR(h*.2,-h*.35,h*.11,hy-h*.045);g.fillStyle=Q.skin;g.beginPath();g.ellipse(h*.1,hy-h*.045,h*.055,h*.018,-.15,0,7);g.fill()}
+  else if(mood==='elated'){armR(h*.2,-h*.5,h*.17,hy-h*.2);camera(g,h*.2,hy-h*.27,h*.07)}
+  else if(mood==='aim'){armR(h*.2,-h*.3,h*.15,hy+h*.04);camera(g,h*.12,hy-h*.005,h*.085)}
+  else if(mood==='frenzy'){armR(h*.2,-h*.3,h*.15,hy+h*.04);camera(g,h*.12,hy-h*.005,h*.085);
+    const fl=reduce?0:((t*4.5)%1);if(fl<.18){g.fillStyle=`rgba(255,250,220,${1-fl/.18})`;g.beginPath();g.arc(h*.08,hy-h*.075,h*.06,0,7);g.fill()}}
+  else armR(h*.16,-h*.22,h*.1,-h*.12);
+  g.restore();
+}
+function sleeper(g,h,t){
+  // camp chair
+  g.strokeStyle=Q.metal;g.lineWidth=Math.max(1.5,h*.018);g.beginPath();
+  g.moveTo(-h*.16,0);g.lineTo(h*.14,-h*.3);g.moveTo(h*.14,0);g.lineTo(-h*.16,-h*.3);g.moveTo(-h*.2,-h*.62);g.lineTo(-h*.16,-h*.3);g.stroke();
+  g.fillStyle=Q.chair;g.beginPath();g.moveTo(-h*.2,-h*.3);g.lineTo(h*.18,-h*.3);g.lineTo(h*.15,-h*.22);g.lineTo(-h*.17,-h*.22);g.closePath();g.fill();
+  g.beginPath();g.moveTo(-h*.24,-h*.66);g.lineTo(-h*.12,-h*.66);g.lineTo(-h*.1,-h*.3);g.lineTo(-h*.2,-h*.3);g.closePath();g.fill();
+  // legs stretched out
+  g.strokeStyle=Q.pants;g.lineWidth=h*.08;g.beginPath();g.moveTo(-h*.05,-h*.3);g.lineTo(h*.22,-h*.26);g.lineTo(h*.3,-h*.05);g.stroke();
+  g.fillStyle=Q.boot;g.beginPath();g.ellipse(h*.33,-h*.03,h*.07,h*.035,0,0,7);g.fill();
+  // torso reclined
+  g.save();g.translate(-h*.06,-h*.3);g.rotate(-.35);
+  g.fillStyle=Q.jacket;rr(g,-h*.12,-h*.38,h*.24,h*.4,h*.08);g.fill();
+  camera(g,h*.06,-h*.08,h*.07);
+  const hy=-h*.47,br=reduce?0:Math.sin(t*1.6)*h*.006;
+  g.fillStyle=Q.skin;g.beginPath();g.arc(h*.0,hy+br,h*.095,0,7);g.fill();
+  g.strokeStyle=Q.ink;g.lineWidth=Math.max(1.2,h*.012);
+  g.fillStyle='#3A1410';g.beginPath();g.ellipse(h*.055,hy+h*.05+br,h*.014,h*.018,0,0,7);g.fill();
+  // hat tipped over the eyes
+  g.fillStyle=Q.hat;g.save();g.translate(h*.02,hy-h*.02+br);g.rotate(.35);rr(g,-h*.09,-h*.1,h*.19,h*.1,h*.045);g.fill();g.beginPath();g.ellipse(0,0,h*.16,h*.03,0,0,7);g.fill();g.fillStyle=Q.band;g.fillRect(-h*.09,-h*.035,h*.19,h*.02);g.restore();
+  // dangling arm
+  g.strokeStyle=Q.jacket;g.lineWidth=h*.07;g.beginPath();g.moveTo(h*.06,-h*.32);g.quadraticCurveTo(h*.18,-h*.16,h*.2,-h*.02);g.stroke();
+  g.restore();
+}
+
+/* ---------- scenery ---------- */
+const SCN=(()=>{let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+  const far=[],near=[],stars=[],tufts=[],flies=[];
+  for(let x=-.02;x<1.04;x+=.016+r()*.012)far.push({x,h:.05+r()*.07,w:.035+r()*.02});
+  for(let i=0;i<16;i++){const left=i<9;near.push({x:left?-.05+r()*.27:.88+r()*.18,h:.3+r()*.25,w:.09+r()*.05,b:.7+r()*.12})}
+  for(let i=0;i<70;i++)stars.push({x:.22+r()*.62,y:r()*.45,r:.5+r()*1.2,p:r()*6});
+  for(let i=0;i<46;i++)tufts.push({x:r(),y:.64+r()*.36,s:.6+r()*.8});
+  for(let i=0;i<10;i++)flies.push({x:.28+r()*.55,y:.45+r()*.4,p:r()*6,s:.5+r()});
+  near.sort((a,b)=>a.b-b.b);
+  return {far,near,stars,tufts,flies}})();
+const HZ=.6;
+const PAL={normal:{top:'#0A1430',hz:'#244E58',far:'#14323B',near:'#0B1E22',g1:'#13291F',g2:'#091612',path:'#2E3729',tuft:'#1E3B2A'},
+  pump:{top:'#0A2328',hz:'#2E7A5E',far:'#124036',near:'#0A2420',g1:'#123222',g2:'#09180F',path:'#33402E',tuft:'#22492E'},
+  dump:{top:'#03060B',hz:'#0F1C24',far:'#0A181E',near:'#050D10',g1:'#0A1714',g2:'#050D0B',path:'#1A211C',tuft:'#0F2219'}};
+function pine(g,x,yb,w,h,col){g.fillStyle=col;g.fillRect(x-w*.07,yb-h*.22,w*.14,h*.22);
+  for(let i=0;i<3;i++){const by=yb-h*(.16+.27*i),tw=w*(1-.27*i),th=h*.42;g.beginPath();g.moveTo(x,by-th);g.lineTo(x+tw/2,by);g.lineTo(x-tw/2,by);g.closePath();g.fill()}}
+function scenery(g,W,H,m){const p=PAL[m];
+  const sk=g.createLinearGradient(0,0,0,H*HZ);sk.addColorStop(0,p.top);sk.addColorStop(1,p.hz);g.fillStyle=sk;g.fillRect(0,0,W,H*HZ+2);
+  if(m==='pump'){for(let i=0;i<3;i++){const gr=g.createLinearGradient(0,H*(.08+i*.07),0,H*(.3+i*.07));gr.addColorStop(0,'rgba(46,230,166,0)');gr.addColorStop(.5,`rgba(46,230,166,${.16-i*.04})`);gr.addColorStop(1,'rgba(46,230,166,0)');g.fillStyle=gr;g.beginPath();g.moveTo(0,H*(.2+i*.06));
+    for(let x=0;x<=W;x+=W/24)g.lineTo(x,H*(.16+i*.06)+Math.sin(x/W*7+i)*H*.04);g.lineTo(W,H*(.42+i*.04));g.lineTo(0,H*(.42+i*.04));g.closePath();g.fill()}}
+  const mx=W*.84,my=H*.15,mr=H*.055;const gl=g.createRadialGradient(mx,my,mr,mx,my,mr*4);gl.addColorStop(0,'rgba(243,235,200,.18)');gl.addColorStop(1,'rgba(243,235,200,0)');g.fillStyle=gl;g.fillRect(mx-mr*4,my-mr*4,mr*8,mr*8);
+  g.fillStyle=m==='dump'?'#B8B190':'#F3EBC8';g.beginPath();g.arc(mx,my,mr,0,7);g.fill();
+  for(const t of SCN.far)pine(g,t.x*W,H*HZ+H*.01,t.w*H,t.h*H,p.far);
+  const gg=g.createLinearGradient(0,H*HZ,0,H);gg.addColorStop(0,p.g1);gg.addColorStop(1,p.g2);g.fillStyle=gg;g.fillRect(0,H*HZ,W,H*(1-HZ)+1);
+  g.fillStyle=p.path;g.beginPath();g.moveTo(W*.59,H*HZ);g.lineTo(W*.615,H*HZ);g.lineTo(W*1.0,H);g.lineTo(W*.4,H);g.closePath();g.fill();
+  g.strokeStyle=p.tuft;g.lineWidth=Math.max(1,H*.004);g.beginPath();for(const t of SCN.tufts){const x=t.x*W,y=t.y*H,s=t.s*H*.02*(t.y-.5)*2;g.moveTo(x-s*.6,y);g.lineTo(x-s*.9,y-s*1.4);g.moveTo(x,y);g.lineTo(x,y-s*1.8);g.moveTo(x+s*.6,y);g.lineTo(x+s*.9,y-s*1.4)}g.stroke();
+  for(const t of SCN.near)pine(g,t.x*W,t.b*H,t.w*H,t.h*H,p.near);
+}
+function candles(g,W,H,up){const n=12,w=W/n;g.globalAlpha=.2;g.fillStyle=up?'#2EE6A6':'#FF6B6B';
+  for(let i=2;i<n-1;i++){const base=up?H*.5-(i-2)*H*.03:H*.18+(i-2)*H*.03,h=H*.06+Math.sin(i*1.7)*H*.015,x=i*w+w*.3;g.fillRect(x,base-h,w*.36,h);g.fillRect(x+w*.16,base-h-h*.4,w*.04,h*1.8)}g.globalAlpha=1}
+
+// draw fn into a w×h box at resolution q (1 = sharp), then paint it at x,y. Low q = blurry blob.
+const off=document.createElement('canvas'),ox=off.getContext('2d');
+function soft(g,dpr,x,y,w,h,q,fn){
+  const s=Math.max(.03,q)*dpr,ow=Math.max(2,Math.ceil(w*s)),oh=Math.max(2,Math.ceil(h*s));
+  off.width=ow;off.height=oh;ox.setTransform(ow/w,0,0,oh/h,0,0);fn(ox);
+  g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(off,0,0,ow,oh,x,y,w,h);
+}
+function drawSquatchAt(g,dpr,x,feet,h,q,t,o){const bw=h*1.25,bh=h*1.2;soft(g,dpr,x-bw/2,feet-bh,bw,bh,q,c=>{c.translate(bw/2,bh-h*.01);squatch(c,h,t,o)})}
+function bigText(g,txt,x,y,size,fill,rot){g.save();g.translate(x,y);g.rotate(rot||0);g.font=`400 ${Math.round(size)}px ${FONT_D}`;g.textAlign='center';g.textBaseline='middle';g.lineWidth=size*.16;g.strokeStyle='#071012';g.lineJoin='round';g.strokeText(txt,0,0);g.fillStyle=fill;g.fillText(txt,0,0);g.restore()}
+function burst(g,x,y,r,col){g.fillStyle=col;g.strokeStyle='#071012';g.lineWidth=Math.max(2,r*.06);g.beginPath();const n=14;for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2,rr2=i%2?r*.78:r;g.lineTo(x+Math.cos(a)*rr2*1.35,y+Math.sin(a)*rr2*.8)}g.closePath();g.fill();g.stroke()}
+
+/* ---------- hero stage ---------- */
+const cv=$('c');let ctx=cv.getContext('2d'),W=0,H=0,DPR=1;const bgCache={};
+function size(){DPR=DPRx();const r=cv.getBoundingClientRect();if(!r.width)return;W=r.width;H=r.height;cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);for(const k in bgCache)delete bgCache[k]}
+addEventListener('resize',size);size();
+function bg(m){let c=bgCache[m];if(!c){c=document.createElement('canvas');c.width=cv.width;c.height=cv.height;const g=c.getContext('2d');g.setTransform(DPR,0,0,DPR,0,0);scenery(g,W,H,m);bgCache[m]=c}ctx.drawImage(c,0,0,W,H)}
+function stars(t,a){for(const s of SCN.stars){ctx.globalAlpha=a*(.45+.45*Math.sin(t*2+s.p));ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x*W,s.y*H*HZ,s.r,0,7);ctx.fill()}ctx.globalAlpha=1}
+function flies(t){for(const f of SCN.flies){const x=(f.x+Math.sin(t*.3*f.s+f.p)*.03)*W,y=(f.y+Math.cos(t*.4*f.s+f.p)*.02)*H,a=.35+.35*Math.sin(t*2*f.s+f.p);const gr=ctx.createRadialGradient(x,y,0,x,y,H*.018);gr.addColorStop(0,`rgba(255,198,92,${a})`);gr.addColorStop(1,'rgba(255,198,92,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(x,y,H*.018,0,7);ctx.fill()}}
+
+const banner=$('banner'),goBtn=$('goBtn'),wake=$('wake');
+function overlay(txt,go,wk){if(banner.textContent!==txt)banner.textContent=txt;banner.hidden=!txt;goBtn.hidden=!go;wake.hidden=!wk}
+
+// ---- The hero scene ----
+// rest:     Blobsquatch is far off, walking away between the trees (a blur). Barry squints. "Go Squatching" is free.
+// approach: Barry creeps closer, the view pushes in, and his backside comes into focus.
+// ready:    "Snap a pic" appears (mints the NFT). He keeps ambling; he never runs off.
+// minting:  waiting on the wallet. twig: Barry steps on a twig. glance: Blobsquatch looks back.
+// frozen:   flash, freeze frame, and the Polaroid develops with the NFT.
+const S={mode:'rest',t:0,glance:0,frozen:null,flash:0,nft:null};
+const snapBox=$('snapBox'),mintPol=$('mintPol');
+function setMode(m){S.mode=m;S.t=0}
+function freezeFrame(){const c=document.createElement('canvas');c.width=cv.width;c.height=cv.height;c.getContext('2d').drawImage(cv,0,0);return c}
+// ---- The deep woods (a small 3D world, so moving forward gives real parallax) ----
+// Blobsquatch stands about 14 units into the forest. Going squatching dollies the camera 10 units in,
+// near trunks slide past, and you end up framed between two big trunks, looking at him in a moonlit clearing.
+const EYE=1.35,FOV=.9,SQZ=14,CLEAR_X=.1,DOLLY=9.2,SQ_H=2.5;
+const FOREST=(()=>{let s=21;const r=()=>(s=(s*16807)%2147483647)/2147483647;const trunks=[],ferns=[],canopy=[];
+  trunks.push({x:-1.3,z:13.2,w:.5},{x:1.55,z:13.0,w:.55}); // the two trunks that frame the shot
+  for(let i=0;i<90;i++){const z=1.8+r()*38,x=(r()*2-1)*(3.5+z*.5),w=.22+r()*.42;
+    if(z<14&&Math.abs(x-CLEAR_X)<1.15)continue;          // keep the line of sight to the clearing open
+    if(z>=12.6&&z<16.5&&Math.abs(x-CLEAR_X)<1.9)continue; // the clearing itself
+    trunks.push({x,z,w})}
+  for(let i=0;i<140;i++){const z=1+r()*30,x=(r()*2-1)*(2.5+z*.45),sz=.3+r()*.55;
+    if(z>9.5&&z<14.5&&Math.abs(x-CLEAR_X)<1.0)continue;ferns.push({x,z,s:sz,seed:r()*99})}
+  for(const [x,z,sz] of [[-.6,13.6,.6],[.15,13.4,.55],[.8,13.65,.6],[-.2,13.85,.5],[.45,13.9,.5]])ferns.push({x,z,s:sz,seed:x*10+z}); // ferns around his feet
+  for(let i=0;i<260;i++){const x=r(),y=Math.pow(r(),1.8)*.2;if(x>.66&&x<.86&&y<.17)continue;canopy.push({x,y,rx:.008+r()*.02,ry:.004+r()*.008,a:r()*3,c:r()})} // leaves, with a gap for the moon
+  return {trunks,ferns,canopy}})();
+const mix3=(a,b,k)=>`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')})`;
+const FOG=[30,58,68],LIT=[236,240,228];
+function P3(x,y,z,camZ){const d=z-camZ,f=H*FOV/d;return [W/2+x*f,H*.48+(EYE-y)*f,f,d]}
+function shade(base,d,FL){const fk=clamp((d-2)/24,0,1)*.9;let c=base.map((v,i)=>v+(FOG[i]-v)*fk);if(FL)c=c.map((v,i)=>v+(LIT[i]-v)*FL*clamp(1-d/7,0,1)*.8);return mix3(c,c,0)}
+function drawTrunk(T,camZ,FL){const [sx,sy,f,d]=P3(T.x,0,T.z,camZ);if(d<.3)return;const w=T.w*f;if(sx+w<-20||sx-w>W+20)return;
+  ctx.fillStyle=shade([46,37,30],d,FL);ctx.fillRect(sx-w/2,-10,w,sy+10);
+  ctx.beginPath();ctx.moveTo(sx-w*.8,sy);ctx.quadraticCurveTo(sx-w*.5,sy-w*.3,sx-w*.45,sy-w*.9);ctx.lineTo(sx+w*.45,sy-w*.9);ctx.quadraticCurveTo(sx+w*.5,sy-w*.3,sx+w*.8,sy);ctx.closePath();ctx.fill();
+  if(d<14){ctx.fillStyle=`rgba(0,0,0,${.22*(1-d/14)})`;for(let k=0;k<3;k++)ctx.fillRect(sx-w/2+w*(.2+k*.25),-10,Math.max(1,w*.05),sy+10);
+    ctx.fillStyle=`rgba(190,210,230,${.14*(1-d/14)})`;ctx.fillRect(sx+w*.36,-10,w*.12,sy+10)}}
+function drawFern(F,camZ,FL){const [sx,sy,f,d]=P3(F.x,0,F.z,camZ);if(d<.25)return;const s=F.s*f;if(sx+s<-20||sx-s>W+20)return;
+  ctx.fillStyle=shade(F.seed%2>1?[30,74,44]:[24,62,38],d,FL);
+  for(let i=0;i<7;i++){const a=-Math.PI/2+(i-3)*.34+Math.sin(F.seed+i)*.1,L=s*(.8+.25*Math.sin(F.seed*3+i));
+    ctx.beginPath();ctx.ellipse(sx+Math.cos(a)*L*.5,sy+Math.sin(a)*L*.5,L*.55,L*.12,a,0,7);ctx.fill()}}
+function drawLog(camZ,FL){const z=3.2,[x0,y0,f,d]=P3(-2.8,0,z,camZ);if(d<.3)return;const [x1]=P3(-.3,0,z,camZ),hgt=.5*f;
+  ctx.fillStyle=shade([58,44,32],d,FL);rr(ctx,x0,y0-hgt,x1-x0,hgt,hgt*.45);ctx.fill();
+  ctx.fillStyle=shade([46,92,52],d,FL);rr(ctx,x0+hgt*.2,y0-hgt*1.04,x1-x0-hgt*.4,hgt*.32,hgt*.16);ctx.fill();
+  ctx.fillStyle=shade([88,66,46],d,FL);ctx.beginPath();ctx.ellipse(x1,y0-hgt/2,hgt*.22,hgt*.48,0,0,7);ctx.fill()}
+function drawBeam(camZ,FL){const [gx2,gy,f]=P3(CLEAR_X,0,SQZ+.6,camZ),bw=1.6*f,top=gx2+W*.1;
+  ctx.save();ctx.globalCompositeOperation='lighter';const g=ctx.createLinearGradient(0,0,0,gy);g.addColorStop(0,'rgba(200,220,255,.02)');g.addColorStop(1,'rgba(200,220,255,.13)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(top-W*.03,0);ctx.lineTo(top+W*.04,0);ctx.lineTo(gx2+bw,gy);ctx.lineTo(gx2-bw,gy);ctx.closePath();ctx.fill();
+  const pool=ctx.createRadialGradient(gx2,gy,0,gx2,gy,bw*1.3);pool.addColorStop(0,'rgba(210,225,255,.22)');pool.addColorStop(1,'rgba(210,225,255,0)');ctx.fillStyle=pool;ctx.beginPath();ctx.ellipse(gx2,gy,bw*1.3,bw*.3,0,0,7);ctx.fill();ctx.restore()}
+function forestBackdrop(k){
+  const sky=ctx.createLinearGradient(0,0,0,H*.5);sky.addColorStop(0,'#081226');sky.addColorStop(1,'#16343E');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H*.5);
+  ctx.fillStyle='#F3EBC8';ctx.beginPath();ctx.arc(W*.76,H*.1,H*.045,0,7);ctx.fill();
+  const gg=ctx.createLinearGradient(0,H*.48,0,H);gg.addColorStop(0,'#1A3530');gg.addColorStop(1,'#0B1912');ctx.fillStyle=gg;ctx.fillRect(0,H*.48,W,H*.52);
+  const fog=ctx.createLinearGradient(0,H*.3,0,H*.62);fog.addColorStop(0,'rgba(30,58,68,0)');fog.addColorStop(.6,'rgba(40,70,80,.55)');fog.addColorStop(1,'rgba(30,58,68,0)');ctx.fillStyle=fog;ctx.fillRect(0,H*.3,W,H*.32);
+}
+function forestCanopy(k){const sc=1+.08*k;for(const c of FOREST.canopy){ctx.fillStyle=c.c<.4?'#0A1C1A':c.c<.75?'#0E2620':'#12302A';ctx.beginPath();ctx.ellipse((c.x-.5)*W*sc+W/2,c.y*H*sc,c.rx*W*sc*2.2,c.ry*W*sc*2.2,c.a,0,7);ctx.fill()}}
+function drawForest(t,k,FL,sqx,glance,walking,o={}){
+  const camZ=DOLLY*k;
+  forestBackdrop(k);
+  if(o.candles)candles(ctx,W,H,o.candles==='up');
+  const items=[];
+  for(const T of FOREST.trunks)items.push({z:T.z,f:()=>drawTrunk(T,camZ,FL)});
+  for(const F of FOREST.ferns)items.push({z:F.z,f:()=>drawFern(F,camZ,FL)});
+  items.push({z:SQZ+.6,f:()=>drawBeam(camZ,FL)});
+  items.push({z:3.2,f:()=>drawLog(camZ,FL)});
+  let box=null;
+  if(!o.noSq)items.push({z:SQZ,f:()=>{const [sx,sy,f,d]=P3(sqx,0,SQZ,camZ),h=SQ_H*f,q=lerp(.13,1,Math.pow(k,1.4));
+    const bob=walking?Math.abs(Math.sin(t*(k>.5?3:5)))*h*.025:0;
+    drawSquatchAt(ctx,DPR,sx,sy,h,q,t,{back:true,walk:walking,bob,glance,gside:-1});
+    if(FL){ctx.save();ctx.globalCompositeOperation='lighter';const g=ctx.createRadialGradient(sx,sy-h*.5,0,sx,sy-h*.5,h*.7);g.addColorStop(0,`rgba(255,250,235,${.18*FL})`);g.addColorStop(1,'rgba(255,250,235,0)');ctx.fillStyle=g;ctx.fillRect(sx-h,sy-h*1.3,h*2,h*1.4);ctx.restore()}
+    box={x:sx,y:sy,h}}});
+  items.sort((a,b)=>b.z-a.z).forEach(it=>it.f());
+  forestCanopy(k);
+  if(o.dark){ctx.fillStyle=`rgba(0,4,8,${o.dark})`;ctx.fillRect(0,0,W,H)}
+  return box;
+}
+function foreFerns(t,k,bobY){ // the ferns right in front of you and Barry
+  const sway=reduce?0:Math.sin(t*1.3)*.05;
+  for(const [fx,fy,s,seed] of [[.06,1.04,.24,1],[.22,1.06,.2,2],[.92,1.05,.26,3],[.78,1.08,.18,4]]){
+    ctx.fillStyle=seed%2?'#0C2216':'#0F2A1B';const x=fx*W,y=fy*H+bobY,L0=s*H;
+    for(let i=0;i<8;i++){const a=-Math.PI/2+(i-3.5)*.3+sway,L=L0*(.8+.2*Math.sin(seed*3+i));ctx.beginPath();ctx.ellipse(x+Math.cos(a)*L*.5,y+Math.sin(a)*L*.5,L*.55,L*.13,a,0,7);ctx.fill()}}}
+function viewfinder(b){const {x,y,h}=b,w=h*.42,top=y-h*1.08,bot=y-h*.02,c=h*.12;
+  ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;ctx.beginPath();
+  for(const [px,py,dx,dy] of [[x-w,top,1,1],[x+w,top,-1,1],[x-w,bot,1,-1],[x+w,bot,-1,-1]]){ctx.moveTo(px,py+dy*c);ctx.lineTo(px,py);ctx.lineTo(px+dx*c,py)}ctx.stroke();
+  const fy=y-h*.82,fs=h*.07;ctx.strokeStyle='#2EE6A6';ctx.strokeRect(x-fs,fy-fs,fs*2,fs*2)}
+
+function sceneSquatching(t,dt){
+  S.t+=dt;
+  if(S.mode==='frozen'){
+    ctx.drawImage(S.frozen,0,0,W,H);
+    if(S.flash>0){S.flash=Math.max(0,S.flash-dt*2.2);ctx.fillStyle=`rgba(255,252,235,${S.flash})`;ctx.fillRect(0,0,W,H)}
+    overlay('',false,false);snapBox.hidden=true;return;
+  }
+  if(S.mode==='approach'&&S.t>=2.6)setMode('ready');
+  const k=S.mode==='rest'?0:S.mode==='approach'?sm(S.t/2.6):1;
+  if(S.mode==='glance')S.glance=Math.min(1,S.t/.3);
+  // he wanders between the trunks while you're far, then ambles into the clearing as you close in
+  const wanderX=reduce?CLEAR_X:CLEAR_X+Math.sin(t*.22)*3.1,sqx=lerp(wanderX,CLEAR_X,k);
+  const shoot=S.mode==='glance'&&S.t>=.55;
+  const walking=S.glance===0&&!reduce;
+  const box=drawForest(t,k,shoot?1:0,sqx,S.glance,walking);
+  // Barry, with you in the foreground
+  const creep=S.mode==='approach'&&!reduce?Math.abs(Math.sin(S.t*6))*H*.012:0,rh=H*.62,bx=W*.15;
+  const mood=S.mode==='rest'?'squint':S.mode==='approach'?'watch':'aim';
+  ctx.save();ctx.translate(bx,H*1.07-creep);squatcher(ctx,rh,t,mood);ctx.restore();
+  if(shoot){ctx.save();ctx.globalCompositeOperation='lighter';const g=ctx.createRadialGradient(W*.3,H,0,W*.3,H,H*.7);g.addColorStop(0,'rgba(255,250,235,.35)');g.addColorStop(1,'rgba(255,250,235,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore()}
+  foreFerns(t,k,creep*.6);
+  if(S.mode==='twig'||S.mode==='glance'){
+    const tx=bx+rh*.2,ty=H*.975,s=H*.05;
+    ctx.strokeStyle='#8A6040';ctx.lineWidth=Math.max(2,H*.009);ctx.lineCap='round';ctx.beginPath();
+    ctx.moveTo(tx-s,ty);ctx.lineTo(tx-s*.08,ty-s*.18);ctx.moveTo(tx+s*.08,ty-s*.18);ctx.lineTo(tx+s,ty);ctx.stroke();
+    if(S.mode==='twig'){ctx.strokeStyle='#FFC65C';ctx.lineWidth=Math.max(1.5,H*.004);ctx.beginPath();
+      for(const a of [-2.2,-1.57,-.9]){ctx.moveTo(tx+Math.cos(a)*s*.35,ty-s*.2+Math.sin(a)*s*.35);ctx.lineTo(tx+Math.cos(a)*s*.7,ty-s*.2+Math.sin(a)*s*.7)}ctx.stroke();
+      bigText(ctx,'snap!',tx,ty-s*1.6,H*.045,'#FFC65C',-.12)}
+  }
+  if(S.mode==='twig'&&S.t>=.55)setMode('glance');
+  if(shoot){S.frozen=freezeFrame();S.flash=1;setMode('frozen');setTimeout(showNFT,450)}
+  else if(box&&(S.mode==='ready'||S.mode==='minting'||S.mode==='twig'||S.mode==='glance'))viewfinder(box);
+  overlay('',S.mode==='rest',false);
+  snapBox.hidden=!(S.mode==='ready'||S.mode==='minting');
+}
+
+/* ---------- Go Squatching + "Snap a pic" (NFT mint) ---------- */
+// Going squatching is free and needs no wallet. "Snap a pic" mints one of 1,967 Blobsquatch NFTs.
+// At launch: window.BLOBSQUATCH_WALLET = {
+//   signIn: async () => accountId,
+//   mint:   async () => ({ tokenId, traits:{ pose, setting, film, ultra } })   // calls the NFT contract's mint
+// }
+// The contract enforces: 1,967 max · one per wallet · 3 NEAR · free when the wallet holds 1M+ $BLOBSQUATCH ·
+// each paid mint splits 1 NEAR to buy-and-burn $BLOBSQUATCH, 1 NEAR to the Squatcher Stash, 1 NEAR to the creator ·
+// #352 is the one-of-one "Frame 352" · royalties 3% (1% buy-and-burn, 1% Squatcher Stash, 1% creator).
+// Every NFT stays undeveloped until all 1,967 are minted or REVEAL_DATE passes. A provenance hash of the final art is posted before the mint.
+const NFT_SUPPLY=1967,MINT_PRICE='3 NEAR',FREE_HOLD='1M+',REVEAL_DATE=''; // e.g. 'Dec 1' once set
+let account=null;
+const say=m=>{$('claimStatus').textContent=m};
+async function connect(){if(account)return account;account=await window.BLOBSQUATCH_WALLET.signIn();$('wStatus').textContent=`Connected: ${account}. Your scores are logged.`;return account}
+const POSES=['Glance Left','Glance Right','Mid-Stride','Wave','Startled'],SETTINGS=['Night','Dawn Fog','Snow','Rain','Campfire'],FILMS=['Polaroid','Trail Cam','Disposable','Night Vision'];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function randomNFT(){return {id:1+Math.floor(Math.random()*NFT_SUPPLY),pose:pick(POSES),setting:pick(SETTINGS),film:pick(FILMS),ultra:Math.random()<.03,preview:true}}
+goBtn.addEventListener('click',()=>{if(S.mode!=='rest')return;setMode('approach');say('Shh. Sneaking up on him…')});
+$('snapBtn').addEventListener('click',async()=>{
+  if(S.mode!=='ready')return;
+  if(!window.BLOBSQUATCH_WALLET){S.nft=randomNFT();say('Preview. At launch, this connects your NEAR wallet and mints your NFT.');setMode('twig');return}
+  setMode('minting');
+  try{
+    say('Connecting your wallet…');await connect();
+    say(`Approve the mint in your wallet: ${MINT_PRICE}, or free if you hold ${FREE_HOLD} $BLOBSQUATCH.`);
+    const r=await window.BLOBSQUATCH_WALLET.mint();
+    S.nft={id:r.tokenId,...(r.traits||{}),preview:false};say('');setMode('twig');
+  }catch(e){setMode('ready');const m=e&&e.message||'';say(/sold out|already/i.test(m)?m:'Nothing was minted. Tap Snap a pic to try again.')}
+});
+$('backWoods').addEventListener('click',()=>{mintPol.hidden=true;S.glance=0;S.frozen=null;setMode('rest');say('')});
+
+// ---- the NFT photo (the preview draws the same traits the contract will return) ----
+function poseOpts(p){return p==='Glance Left'?{back:true,glance:1,gside:-1}:p==='Glance Right'?{back:true,glance:1,gside:1}:p==='Mid-Stride'?{back:true,walk:true,bob:0}:p==='Wave'?{arms:'wave',happy:true}:{arms:'up',happy:true}}
+const nh=n=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function renderNFT(c,n){
+  const g=c.getContext('2d'),Z=c.width;g.setTransform(1,0,0,1,0,0);g.globalCompositeOperation='source-over';g.globalAlpha=1;g.clearRect(0,0,Z,Z);
+  { // the same deep woods as the hero, drawn into the Polaroid
+    const keep=[ctx,W,H,DPR];ctx=g;W=Z;H=Z;DPR=1;drawForest(1.3,1,0,0,0,false,{noSq:true});[ctx,W,H,DPR]=keep;
+  }
+  if(n.setting==='Dawn Fog'){const sk=g.createLinearGradient(0,0,0,Z*.6);sk.addColorStop(0,'rgba(255,150,130,.15)');sk.addColorStop(1,'rgba(255,190,150,.45)');g.fillStyle=sk;g.fillRect(0,0,Z,Z*.6)}
+  if(n.setting==='Snow'){g.fillStyle='rgba(232,242,250,.75)';g.fillRect(0,Z*.5,Z,Z*.5)}
+  if(n.setting==='Rain'){g.fillStyle='rgba(8,16,26,.4)';g.fillRect(0,0,Z,Z)}
+  const h=Z*.66,feet=Z*.97,x=Z*.52,o=poseOpts(n.pose);
+  if(n.ultra)soft(g,1,x-h*.65,feet-h*1.2,h*1.3,h*1.2,.07,cc=>{cc.translate(h*.65,h*1.19);squatch(cc,h,1.3,o)});
+  else{g.save();g.translate(x,feet);squatch(g,h,1.3,o);g.restore()}
+  if(n.setting==='Dawn Fog'){const f=g.createLinearGradient(0,Z*.45,0,Z);f.addColorStop(0,'rgba(240,235,240,0)');f.addColorStop(.4,'rgba(240,235,240,.35)');f.addColorStop(1,'rgba(240,235,240,.15)');g.fillStyle=f;g.fillRect(0,0,Z,Z)}
+  if(n.setting==='Snow'){g.fillStyle='#fff';for(let i=0;i<70;i++){g.beginPath();g.arc(nh(i)*Z,nh(i+90)*Z,1+nh(i+7)*2.2,0,7);g.fill()}}
+  if(n.setting==='Rain'){g.strokeStyle='rgba(190,215,255,.35)';g.lineWidth=1.5;g.beginPath();for(let i=0;i<90;i++){const rx=nh(i)*Z,ry=nh(i+40)*Z;g.moveTo(rx,ry);g.lineTo(rx-6,ry+18)}g.stroke()}
+  if(n.setting==='Campfire'){g.globalCompositeOperation='lighter';const r=g.createRadialGradient(Z*.12,Z*.98,0,Z*.12,Z*.98,Z*.7);r.addColorStop(0,'rgba(255,140,40,.55)');r.addColorStop(1,'rgba(255,140,40,0)');g.fillStyle=r;g.fillRect(0,0,Z,Z);g.globalCompositeOperation='source-over';
+    g.fillStyle='#FF8A2A';for(const [fx,fh] of [[.08,.11],[.12,.15],[.16,.1]]){g.beginPath();g.moveTo(Z*(fx-.03),Z);g.quadraticCurveTo(Z*fx,Z*(1-fh*1.6),Z*(fx+.03),Z);g.fill()}}
+  if(n.film==='Trail Cam'||n.film==='Night Vision'){g.globalCompositeOperation='saturation';g.fillStyle='#888';g.fillRect(0,0,Z,Z);g.globalCompositeOperation='multiply';g.fillStyle=n.film==='Night Vision'?'#7CFF9A':'#DCE6D6';g.fillRect(0,0,Z,Z);g.globalCompositeOperation='source-over'}
+  if(n.film==='Disposable'){g.globalCompositeOperation='multiply';g.fillStyle='#FFE2B8';g.fillRect(0,0,Z,Z);g.globalCompositeOperation='source-over'}
+  g.fillStyle=g.createPattern(grain,'repeat');g.fillRect(0,0,Z,Z);
+  const vg=g.createRadialGradient(Z/2,Z/2,Z*.3,Z/2,Z/2,Z*.75);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,`rgba(0,0,0,${n.film==='Night Vision'?.6:.35})`);g.fillStyle=vg;g.fillRect(0,0,Z,Z);
+  g.font=`${Math.round(Z*.065)}px VT323, monospace`;g.textBaseline='bottom';
+  if(n.film==='Trail Cam'){g.fillStyle='#F4F4EC';g.textAlign='left';g.fillText('CAM 03  47°F',Z*.04,Z*.97)}
+  if(n.film==='Disposable'){g.fillStyle='#FF8A2A';g.textAlign='right';g.fillText("'67 10 14",Z*.96,Z*.97)}
+  if(n.film==='Night Vision'){g.fillStyle='#B8FFC8';g.textAlign='left';g.fillText('IR ●',Z*.04,Z*.1)}
+}
+// an undeveloped Polaroid: milky haze with a soft pink blob somewhere in it
+function renderDeveloping(c,seed){
+  const g=c.getContext('2d'),Z=c.width;g.setTransform(1,0,0,1,0,0);g.globalCompositeOperation='source-over';g.globalAlpha=1;
+  const bg=g.createLinearGradient(0,0,0,Z);bg.addColorStop(0,'#A9A596');bg.addColorStop(.6,'#C9C4B4');bg.addColorStop(1,'#8F8B7C');g.fillStyle=bg;g.fillRect(0,0,Z,Z);
+  g.fillStyle='rgba(40,52,46,.22)';for(let i=0;i<5;i++){const tx=nh(seed*7+i)*Z;g.fillRect(tx,0,Z*(.05+nh(seed+i*3)*.06),Z)}
+  const bx=Z*(.3+.4*nh(seed)),by=Z*(.45+.22*nh(seed+1)),br=Z*(.1+.09*nh(seed+2));
+  const pk=g.createRadialGradient(bx,by,0,bx,by,br*1.6);pk.addColorStop(0,'rgba(255,79,163,.62)');pk.addColorStop(.55,'rgba(255,110,180,.3)');pk.addColorStop(1,'rgba(255,140,198,0)');
+  g.fillStyle=pk;g.beginPath();g.ellipse(bx,by,br*1.4,br*1.7,0,0,7);g.fill();
+  const milk=g.createRadialGradient(Z*.5,Z*.45,Z*.05,Z*.5,Z*.5,Z*.75);milk.addColorStop(0,'rgba(245,242,232,.35)');milk.addColorStop(1,'rgba(245,242,232,.1)');g.fillStyle=milk;g.fillRect(0,0,Z,Z);
+  g.fillStyle=g.createPattern(grain,'repeat');g.fillRect(0,0,Z,Z);
+  const vg=g.createRadialGradient(Z/2,Z/2,Z*.3,Z/2,Z/2,Z*.75);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.3)');g.fillStyle=vg;g.fillRect(0,0,Z,Z);
+}
+// example Polaroids for the NFT section: all still developing
+const EXAMPLES=[{id:352,cap:'#352 · 1 of 1\nStill developing'},{id:120,cap:'#0120\nStill developing'},{id:954,cap:'#0954\nStill developing'},{id:1967,cap:'#1967\nStill developing'}];
+function drawExamples(){if(!W)return;document.querySelectorAll('.polaroid.ex').forEach((f,i)=>{const n=EXAMPLES[i];renderDeveloping(f.querySelector('canvas'),n.id);f.querySelector('figcaption').textContent=n.cap})}
+function showNFT(){
+  const n=S.nft||randomNFT(),cvN=$('nftCv');renderDeveloping(cvN,n.id);
+  const num=String(n.id).padStart(4,'0');
+  $('nftCap').textContent=`Blobsquatch #${num}`;
+  $('nftMsg').textContent=`It develops when all 1,967 are minted or ${REVEAL_DATE?'on '+REVEAL_DATE:'on the reveal date'}, whichever comes first.`+(n.preview?' (Preview.)':'');
+  cvN.classList.remove('develop');void cvN.offsetWidth;if(!reduce)cvN.classList.add('develop');
+  mintPol.hidden=false;
+}
+
+let ph=0;
+function scenePump(t,dt,k){
+  drawForest(t,1,0,0,0,false,{noSq:true,candles:'up'}); // same deep woods as the squatching scene
+  ph+=dt*(4+4*k);
+  const h=H*.62,x=W*.68+(reduce?0:Math.sin(ph*.5)*W*.03),hop=reduce?0:Math.abs(Math.sin(ph))*H*.05;
+  drawSquatchAt(ctx,DPR,x,H*.985-hop,h,1,t,{arms:'dance',sp:8+6*k,tilt:reduce?0:Math.sin(ph*.5)*.12,happy:true});
+  ctx.save();ctx.translate(W*.2,H*1.0);squatcher(ctx,H*.62,t,'frenzy');ctx.restore();
+  if(!reduce&&((t*4.5)%1)<.08){ctx.fillStyle='rgba(255,250,230,.18)';ctx.fillRect(0,0,W,H)}
+  overlay('PUMPING!',false,false);
+}
+function sceneDump(t,dt,k){
+  drawForest(t,1,0,0,0,false,{noSq:true,candles:'down',dark:.3});
+  const tx=W*.69,h=H*.55,feet=H*.94;
+  drawSquatchAt(ctx,DPR,tx,feet,h,1,t,{splay:true,arms:'none'});
+  // the tree he hides behind
+  const tw=h*.66;ctx.fillStyle='#2A2019';ctx.fillRect(tx-tw/2,feet-H*.95,tw,H*.95+h*.02);
+  ctx.fillStyle='#352920';for(let i=0;i<5;i++)ctx.fillRect(tx-tw/2+tw*(.12+i*.18),feet-H*.95,tw*.04,H*.95);
+  ctx.fillStyle=P.pink;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(tx+tw/2+h*.005,feet-h*(.6+i*.045),h*.028,h*.02,0,0,7);ctx.fill()}
+  ctx.save();ctx.translate(W*.24,H*.99);squatcher(ctx,H*.6,t,'sleep');ctx.restore();
+  const zs=2+Math.round(3*k);for(let i=0;i<zs;i++){const p=reduce?.4:((t*.4+i/zs)%1);ctx.globalAlpha=1-p;bigText(ctx,'z',W*.27+p*W*.07,H*.5-p*H*.3,H*(.045+i*.012),'#E8F0EA',0)}ctx.globalAlpha=1;
+  overlay('',false,true);
+}
+
+// ---- chart input ----
+// At launch: paste the $BLOBSQUATCH pair address from DexScreener (the Ref Finance pool) here.
+const PAIR='';
+const PUMP=2,DUMP=-2; // % change over the last hour
+let pct=0,live=false;
+document.querySelectorAll('#preview .chip').forEach(b=>b.addEventListener('click',()=>{
+  pct=+b.dataset.pct;document.querySelectorAll('#preview .chip').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  if(S.mode!=='rest'){mintPol.hidden=true;S.glance=0;S.frozen=null;setMode('rest');say('')}
+}));
+async function pull(){if(!PAIR)return;try{const r=await fetch('https://api.dexscreener.com/latest/dex/pairs/near/'+PAIR);const d=await r.json();const h1=(d.pair||(d.pairs&&d.pairs[0])||{}).priceChange?.h1;if(typeof h1==='number'){pct=h1;if(!live){live=true;$('preview').hidden=true}}}catch(_){}}
+pull();setInterval(pull,60000);
+
+let last=performance.now();
+function frame(now){
+  if(!W)size();
+  const t=now/1000,dt=Math.min(.05,(now-last)/1000);last=now;
+  if(W){ctx.clearRect(0,0,W,H);
+    if(pct>=PUMP&&S.mode==='rest')scenePump(t,dt,clamp((pct-PUMP)/8,0,1));
+    else if(pct<=DUMP&&S.mode==='rest')sceneDump(t,dt,clamp((DUMP-pct)/8,0,1));
+    else sceneSquatching(t,dt);}
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+setTimeout(drawExamples,60);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawExamples);
+
+// film grain, used on the NFT Polaroids
+const grain=(()=>{const c=document.createElement('canvas');c.width=c.height=160;const g=c.getContext('2d'),d=g.createImageData(160,160);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=26}g.putImageData(d,0,0);return c})();
+
+document.querySelectorAll('.copyBtn').forEach(btn=>btn.addEventListener('click',async()=>{const el=$(btn.dataset.target);try{await navigator.clipboard.writeText(el.textContent);btn.textContent='Copied'}catch(_){const r=document.createRange();r.selectNodeContents(el);getSelection().removeAllRanges();getSelection().addRange(r)}setTimeout(()=>btn.textContent='Copy',1500)}));
+
+/* ---------- Snap the Squatch ---------- */
+// Duck-Hunt-style photo game. Blobsquatch peeks and dashes between trees at three distances.
+// Keep him in the crosshair to focus (far takes longest), then snap. Points = distance value × focus.
+// Snap with no focus and you get a BLOBSQUATCH (10 pts). Bears and Barry cost points.
+const gcv=$('gcv'),gx=gcv.getContext('2d'),gBox=$('gameBox');
+let GW=0,GH=0,GD=1,gBg=null,gTrees=[];
+function gsize(){GD=DPRx();const r=gcv.getBoundingClientRect();if(!r.width)return;GW=r.width;GH=r.height;gcv.width=Math.round(GW*GD);gcv.height=Math.round(GH*GD);gx.setTransform(GD,0,0,GD,0,0);gBg=null;gTrees=[]}
+addEventListener('resize',gsize);gsize();
+const LAYERS=[
+  {name:'FAR',base:.6,h:.12,pts:200,ft:1.0,q:.18,trees:[.1,.27,.44,.6,.76,.92],bark:'#22302B',crown:'#173229'},
+  {name:'MID',base:.79,h:.26,pts:100,ft:.55,q:.42,trees:[.13,.38,.63,.88],bark:'#2C2A22',crown:'#163A2B'},
+  {name:'NEAR',base:1.05,h:.5,pts:50,ft:.25,q:.8,trees:[.03,.97],bark:'#30261D',crown:'#12301F'}];
+const lay=i=>{const L=LAYERS[i];return {...L,y:L.base*GH,hh:L.h*GH,tw:L.h*GH*(i===2?.8:.9)}};
+const SIGHTS=10,NEED=r=>Math.min(3+r,8);
+const G={state:'ready',round:1,sight:0,clear:0,score:0,best:0,film:3,cool:0,flash:0,focus:0,aim:{x:0,y:0},keys:{},holding:false,input:'mouse',
+  actor:null,gap:1,barry:null,barryT:9,laugh:null,pops:[],snapReq:false,paused:false,roundBest:null,lastDecoy:false};
+try{G.best=+localStorage.getItem('snapSquatchBest')||0}catch(_){}
+$('gBest').textContent=fmt(G.best);
+function hud(){$('gRound').textContent=G.round;$('gSight').textContent=`${G.sight}/${SIGHTS}`;$('gClear').textContent=`${G.clear}/${NEED(G.round)}`;
+  $('gFilm').textContent='▮'.repeat(Math.max(0,G.film))+'▯'.repeat(3-Math.max(0,G.film));$('gScore').textContent=fmt(G.score)}
+
+// ---- the actor (Blobsquatch, or a bear decoy) ----
+function sideFor(li,tree){const f=LAYERS[li].trees[tree];return f<.2?1:f>.8?-1:(Math.random()<.5?-1:1)}
+function makeActor(kind){
+  const r=Math.random(),li=kind==='bear'?(r<.5?0:1):(r<.32?0:r<.72?1:2),L=LAYERS[li],nT=L.trees.length,rs=1+(G.round-1)*.18;
+  let tree=Math.floor(Math.random()*nT);const moves=[],n=2+Math.floor(Math.random()*3);
+  for(let i=0;i<n;i++){
+    if(Math.random()<.55||nT<2)moves.push({type:'peek',tree,side:sideFor(li,tree),out:.22/rs,hold:(1.1+Math.random()*.5)/rs,inn:.2/rs});
+    else{let to=tree;while(to===tree)to=Math.floor(Math.random()*nT);moves.push({type:'dash',f0:L.trees[tree],f1:L.trees[to]});tree=to}
+  }
+  const dir=L.trees[tree]<.5?-1:1;moves.push({type:'dash',f0:L.trees[tree],f1:dir<0?-.15:1.15});
+  return {kind,li,moves,mi:0,mt:0,fx:L.trees[tree],pk:0,run:false,side:1,rs,snapped:false,done:false};
+}
+function nextMove(a){a.mi++;a.mt=0;if(a.mi>=a.moves.length)a.done=true}
+function flee(a){a.moves=a.moves.slice(0,a.mi);a.moves.push({type:'dash',f0:a.fx,f1:a.fx<.5?-.15:1.15,fast:true});a.mi=a.moves.length-1;a.mt=0}
+function stepActor(a,dt){
+  const L=lay(a.li),m=a.moves[a.mi];if(!m){a.done=true;return}
+  a.mt+=dt;
+  if(m.type==='peek'){const T=m.out+m.hold+m.inn,u=a.mt;a.pk=u<m.out?sm(u/m.out):u<m.out+m.hold?1:1-sm((u-m.out-m.hold)/m.inn);
+    a.fx=L.trees[m.tree]+m.side*(L.tw*.55*a.pk)/GW;a.side=m.side;a.run=false;if(u>=T)nextMove(a)}
+  else{const dur=Math.max(.15,Math.abs(m.f1-m.f0)*GW/(L.hh*3*a.rs*(m.fast?1.8:1)));const u=clamp(a.mt/dur,0,1);a.fx=lerp(m.f0,m.f1,u);a.run=true;a.side=Math.sign(m.f1-m.f0)||1;a.pk=1;if(a.mt>=dur)nextMove(a)}
+}
+function actorH(a){const L=lay(a.li);return a.kind==='bear'?L.hh*.85:L.hh}
+function occluded(px,py,li){for(let j=li;j<3;j++){const L=lay(j);for(const tf of L.trees){const tx=tf*GW;if(px>tx-L.tw/2&&px<tx+L.tw/2&&py<L.y)return true}}return false}
+function onActor(px,py,a){if(!a||a.done)return false;const L=lay(a.li),h=actorH(a),x=a.fx*GW;
+  if(px<x-h*.34||px>x+h*.34||py<L.y-h*1.02||py>L.y)return false;return !occluded(px,py,a.li)}
+function onBarry(px,py){const b=G.barry;if(!b)return false;const h=GH*.62,x=b.fx*GW;return px>x-h*.16&&px<x+h*.2&&py>GH*1.1-h*1.02}
+
+// ---- drawing ----
+function bear(g,h){
+  const B='#7A5236',B2='#5A3B26',M='#C79B72';g.save();
+  g.fillStyle=B2;for(const d of [-1,1]){g.beginPath();g.ellipse(d*h*.13,-h*.05,h*.1,h*.06,0,0,7);g.fill()}
+  g.fillStyle=B;g.beginPath();g.ellipse(0,-h*.4,h*.3,h*.36,0,0,7);g.fill();
+  for(const d of [-1,1]){g.beginPath();g.arc(d*h*.14,-h*.94,h*.075,0,7);g.fill()}
+  g.beginPath();g.arc(0,-h*.8,h*.2,0,7);g.fill();
+  g.strokeStyle=B;g.lineWidth=h*.12;g.lineCap='round';g.beginPath();g.moveTo(-h*.22,-h*.58);g.lineTo(-h*.3,-h*.3);g.moveTo(h*.22,-h*.58);g.lineTo(h*.3,-h*.3);g.stroke();
+  g.fillStyle=B2;for(const d of [-1,1]){g.beginPath();g.arc(d*h*.14,-h*.94,h*.035,0,7);g.fill()}
+  g.fillStyle=M;g.beginPath();g.ellipse(0,-h*.74,h*.1,h*.07,0,0,7);g.fill();
+  g.fillStyle='#1A0F0A';g.beginPath();g.ellipse(0,-h*.77,h*.035,h*.025,0,0,7);g.fill();
+  for(const d of [-1,1]){g.beginPath();g.arc(d*h*.07,-h*.85,h*.02,0,7);g.fill()}
+  g.restore();
+}
+function buildGameArt(){
+  gBg=document.createElement('canvas');gBg.width=gcv.width;gBg.height=gcv.height;const b=gBg.getContext('2d');b.setTransform(GD,0,0,GD,0,0);
+  const W=GW,H=GH,hz=H*.56;
+  const sk=b.createLinearGradient(0,0,0,hz);sk.addColorStop(0,'#081226');sk.addColorStop(1,'#1E4A52');b.fillStyle=sk;b.fillRect(0,0,W,hz+2);
+  b.fillStyle='rgba(255,255,255,.75)';for(let i=0;i<55;i++){const x=((Math.sin(i*91.7)+1)/2)*W,y=((Math.sin(i*37.3)+1)/2)*hz*.8;b.fillRect(x,y,1.4,1.4)}
+  const mg=b.createRadialGradient(W*.8,H*.13,0,W*.8,H*.13,H*.2);mg.addColorStop(0,'rgba(243,235,200,.25)');mg.addColorStop(1,'rgba(243,235,200,0)');b.fillStyle=mg;b.fillRect(0,0,W,H*.4);
+  b.fillStyle='#F3EBC8';b.beginPath();b.arc(W*.8,H*.13,H*.05,0,7);b.fill();
+  for(let x=-10;x<W+20;x+=H*.035)pine(b,x,hz+H*.01,H*.05,H*(.06+.05*((Math.sin(x*.13)+1)/2)),'#12303A');
+  const gg=b.createLinearGradient(0,hz,0,H);gg.addColorStop(0,'#14301F');gg.addColorStop(1,'#09170F');b.fillStyle=gg;b.fillRect(0,hz,W,H-hz);
+  for(let i=0;i<3;i++){const L=lay(i);b.fillStyle=`rgba(0,0,0,${.12+i*.05})`;b.beginPath();b.ellipse(W/2,L.y+L.hh*.02,W*.8,L.hh*.08,0,0,7);b.fill()}
+  gTrees=LAYERS.map((_,i)=>{const L=lay(i),c=document.createElement('canvas');c.width=gcv.width;c.height=gcv.height;const g=c.getContext('2d');g.setTransform(GD,0,0,GD,0,0);
+    for(const tf of L.trees){const x=tf*W,top=i===2?-10:L.y-L.hh*(i===0?1.7:1.5);
+      g.fillStyle=L.bark;g.fillRect(x-L.tw/2,top,L.tw,L.y-top+L.hh*.02);
+      g.fillStyle='rgba(0,0,0,.18)';for(let k=0;k<4;k++)g.fillRect(x-L.tw/2+L.tw*(.15+k*.22),top,L.tw*.05,L.y-top);
+      g.fillStyle='rgba(255,255,255,.04)';g.fillRect(x-L.tw/2,top,L.tw*.12,L.y-top);
+      if(i<2)pine(g,x,top+L.hh*.3,L.tw*2.1,L.hh*(i===0?1.5:1.1),L.crown)}
+    return c});
+}
+function drawActorAt(a,t,focusQ){
+  const L=lay(a.li),h=actorH(a),x=a.fx*GW,q=lerp(L.q,1,focusQ);
+  const bw=h*1.3,bh=h*1.2;
+  soft(gx,GD,x-bw/2,L.y-bh,bw,bh,q,c=>{c.translate(bw/2,bh-h*.01);
+    if(a.kind==='bear')bear(c,h);
+    else squatch(c,h,t,{walk:a.run,bob:a.run?Math.abs(Math.sin(t*12))*h*.04:0,tilt:a.run?0:a.side*.12,arms:a.laughing?'up':'down',happy:!!a.laughing||a.snapped})});
+}
+function pop(x,y,txt,col){G.pops.push({x,y,txt,col,t:0})}
+
+// ---- photos: crop around him, blur by how well you focused ----
+const tmpC=document.createElement('canvas');
+function capture(a,s,pts,label){
+  if(G.roundBest&&G.roundBest.pts>=pts)return;
+  const L=lay(a.li),h=actorH(a),cx=a.fx*GW,cy=L.y-h*.55,size=Math.min(GH,Math.max(h*1.5,GH*.3));
+  const sx=clamp(cx-size/2,0,GW-size),sy=clamp(cy-size/2,0,GH-size);
+  const img=document.createElement('canvas');img.width=img.height=360;const ig=img.getContext('2d');
+  const q=lerp(.05,1,s),lo=Math.max(4,Math.round(360*q));tmpC.width=tmpC.height=lo;
+  tmpC.getContext('2d').drawImage(gcv,sx*GD,sy*GD,size*GD,size*GD,0,0,lo,lo);
+  ig.imageSmoothingEnabled=true;ig.imageSmoothingQuality='high';ig.drawImage(tmpC,0,0,lo,lo,0,0,360,360);
+  G.roundBest={pts,label,img};
+}
+function doSnap(){
+  if(G.state!=='play'||G.cool>0||G.film<=0)return;
+  G.film--;G.cool=.45;G.flash=1;const {x,y}=G.aim,a=G.actor;
+  if(onBarry(x,y)){G.score=Math.max(0,G.score-50);pop(x,y,"That's Barry. −50",'#FF8A8A')}
+  else if(a&&!a.snapped&&onActor(x,y,a)){
+    if(a.kind==='bear'){G.score=Math.max(0,G.score-50);pop(x,y,"That's a bear. −50",'#FF8A8A')}
+    else{const s=G.focus,L=LAYERS[a.li];let pts,label,col;
+      if(s<.3){pts=10;label='BLOBSQUATCH';col='#FFB59A'}else{pts=Math.round(L.pts*s/10)*10;label=s>=.85?'CLEAR SHOT!':'BLURRY';col=s>=.85?'#2EE6A6':'#FFC65C'}
+      if(s>=.85)G.clear++;G.score+=pts;pop(x,y,`${label} +${pts}`,col);capture(a,s,pts,label);a.snapped=true;flee(a)}
+  }else pop(x,y,'Missed','#E8F0EA');
+  if(G.film<=0&&a&&!a.snapped&&a.kind==='squatch')flee(a);
+  hud();
+}
+
+// ---- flow ----
+function startGameSighting(){G.film=3;G.focus=0;const decoy=G.sight>0&&!G.lastDecoy&&Math.random()<.22;G.lastDecoy=decoy;G.actor=makeActor(decoy?'bear':'squatch');hud()}
+function endSighting(a){if(a.kind==='squatch'){G.sight++;if(!a.snapped){const tree=Math.floor(Math.random()*4);G.laugh={t:0,a:{kind:'squatch',li:1,fx:LAYERS[1].trees[tree]+(tree<2?1:-1)*(lay(1).tw*.6)/GW,side:tree<2?1:-1,run:false,laughing:true,pk:1}}}}G.gap=.7;hud()}
+const pol=$('pol'),polCv=$('polCv'),polG=polCv.getContext('2d');
+function showPolaroid(){if(!G.roundBest){pol.hidden=true;return}polG.fillStyle='#111';polG.fillRect(0,0,360,360);polG.drawImage(G.roundBest.img,0,0);$('polCap').textContent=`Best shot: ${G.roundBest.label} +${G.roundBest.pts}`;pol.hidden=false}
+function roundEnd(){
+  const need=NEED(G.round),ok=G.clear>=need;showPolaroid();gBox.classList.remove('playing');
+  if(G.score>G.best){G.best=G.score;$('gBest').textContent=fmt(G.best);try{localStorage.setItem('snapSquatchBest',G.best)}catch(_){}}
+  if(ok){G.state='round';showOver(`Round ${G.round} cleared!`,`${G.clear} clear shots. Score ${fmt(G.score)}.`,'Next round')}
+  else{G.state='over';logPlay(G.score);showOver('Game over',`You needed ${need} clear shots and got ${G.clear}. Score ${fmt(G.score)}.`,'Play again')}
+}
+function startPlay(fresh){
+  if(fresh){G.round=1;G.score=0}else G.round++;
+  G.sight=0;G.clear=0;G.roundBest=null;G.actor=null;G.laugh=null;G.gap=.9;G.barry=null;G.barryT=7+Math.random()*6;G.pops=[];G.focus=0;G.film=3;
+  if(!G.aim.x){G.aim.x=GW/2;G.aim.y=GH/2}
+  G.state='play';$('gOver').hidden=true;pol.hidden=true;gBox.classList.add('playing');hud();
+}
+function showOver(title,msg,btn){$('gTitle').textContent=title;$('gMsg').textContent=msg;$('gPlay').textContent=btn;$('gOver').hidden=false}
+
+let gLast=performance.now(),gt=0;
+function gframe(now){
+  const dt=Math.min(.05,(now-gLast)/1000);gLast=now;gt+=dt;
+  if(!GW)gsize();
+  if(GW&&!G.paused){
+    if(!gBg)buildGameArt();
+    if(G.state==='play'){
+      const kx=(G.keys.ArrowRight?1:0)-(G.keys.ArrowLeft?1:0),ky=(G.keys.ArrowDown?1:0)-(G.keys.ArrowUp?1:0);
+      if(kx||ky){G.input='key';G.aim.x=clamp(G.aim.x+kx*GW*.6*dt,0,GW);G.aim.y=clamp(G.aim.y+ky*GW*.6*dt,0,GH)}
+      if(G.actor){stepActor(G.actor,dt);if(G.actor.done){endSighting(G.actor);G.actor=null}}
+      else if(G.laugh){G.laugh.t+=dt;if(G.laugh.t>1.4)G.laugh=null}
+      else{G.gap-=dt;if(G.gap<=0){if(G.sight>=SIGHTS)roundEnd();else startGameSighting()}}
+      G.barryT-=dt;if(!G.barry&&G.barryT<=0)G.barry={fx:-.15};
+      if(G.barry){G.barry.fx+=dt*.22;if(G.barry.fx>1.2){G.barry=null;G.barryT=12+Math.random()*8}}
+      const a=G.actor,canFocus=G.input!=='touch'||G.holding;
+      if(a&&!a.snapped&&canFocus&&onActor(G.aim.x,G.aim.y,a))G.focus=Math.min(1,G.focus+dt/LAYERS[a.li].ft);else G.focus=Math.max(0,G.focus-dt*2.5);
+      G.cool=Math.max(0,G.cool-dt);
+    }
+    G.flash=Math.max(0,G.flash-dt*3);
+    gx.drawImage(gBg,0,0,GW,GH);
+    const aimed=G.actor&&!G.actor.snapped&&onActor(G.aim.x,G.aim.y,G.actor);
+    for(let i=0;i<3;i++){
+      if(G.actor&&G.actor.li===i)drawActorAt(G.actor,gt,aimed?G.focus:0);
+      if(G.laugh&&i===1){const l=G.laugh.a;drawActorAt(l,gt*3,1);const L=lay(1);bigText(gx,'HA HA!',l.fx*GW,L.y-L.hh*1.25,GH*.06,'#FFB3D3',-.05)}
+      gx.drawImage(gTrees[i],0,0,GW,GH);
+    }
+    if(G.barry){gx.save();gx.translate(G.barry.fx*GW,GH*1.1+Math.abs(Math.sin(gt*7))*GH*.01);squatcher(gx,GH*.62,gt,'watch');gx.restore()}
+    if(G.snapReq){G.snapReq=false;doSnap()}
+    // viewfinder corners
+    gx.strokeStyle='rgba(232,240,234,.5)';gx.lineWidth=2;const m=14,c=26;
+    gx.beginPath();gx.moveTo(m,m+c);gx.lineTo(m,m);gx.lineTo(m+c,m);gx.moveTo(GW-m-c,m);gx.lineTo(GW-m,m);gx.lineTo(GW-m,m+c);gx.moveTo(m,GH-m-c);gx.lineTo(m,GH-m);gx.lineTo(m+c,GH-m);gx.moveTo(GW-m-c,GH-m);gx.lineTo(GW-m,GH-m);gx.lineTo(GW-m,GH-m-c);gx.stroke();
+    for(const p of G.pops)p.t+=dt;G.pops=G.pops.filter(p=>p.t<1.1);
+    for(const p of G.pops){gx.globalAlpha=1-p.t/1.1;bigText(gx,p.txt,clamp(p.x,GW*.18,GW*.82),p.y-GH*.05-p.t*GH*.08,GH*.05,p.col,0)}gx.globalAlpha=1;
+    if(G.state==='play'){
+      const {x,y}=G.aim,f=G.focus,lock=f>=1,r=lerp(GH*.075,GH*.022,f),col=lock?'#2EE6A6':'#FFC65C';
+      gx.strokeStyle=col;gx.lineWidth=2;gx.beginPath();gx.arc(x,y,r,0,7);gx.stroke();
+      const s=GH*.06;gx.strokeStyle='rgba(255,255,255,.85)';gx.beginPath();
+      for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]]){gx.moveTo(x+dx*s,y+dy*s*.6);gx.lineTo(x+dx*s,y+dy*s);gx.lineTo(x+dx*s*.6,y+dy*s)}gx.stroke();
+      gx.fillStyle='#fff';gx.fillRect(x-1,y-6,2,12);gx.fillRect(x-6,y-1,12,2);
+      if(lock){gx.font=`${Math.round(GH*.045)}px VT323, monospace`;gx.fillStyle=col;gx.textAlign='center';gx.fillText('LOCK',x,y+s+GH*.04)}
+    }
+    if(G.flash>0){gx.fillStyle=`rgba(255,252,235,${.7*G.flash})`;gx.fillRect(0,0,GW,GH)}
+  }
+  requestAnimationFrame(gframe);
+}
+requestAnimationFrame(gframe);
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{for(const e of es)G.paused=!e.isIntersecting}).observe(gBox);
+
+// ---- input ----
+function setAim(e){const r=gcv.getBoundingClientRect();G.aim.x=clamp(e.clientX-r.left,0,GW);G.aim.y=clamp(e.clientY-r.top,0,GH)}
+gcv.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){G.input='mouse';setAim(e)}else if(G.holding)setAim(e)});
+gcv.addEventListener('pointerdown',e=>{gBox.focus({preventScroll:true});if(G.state!=='play')return;setAim(e);
+  if(e.pointerType==='mouse'){G.input='mouse';G.snapReq=true}else{e.preventDefault();G.input='touch';G.holding=true;try{gcv.setPointerCapture(e.pointerId)}catch(_){}}});
+gcv.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse'&&G.holding){G.holding=false;setAim(e);G.snapReq=true}});
+gcv.addEventListener('pointercancel',()=>{G.holding=false});
+let armed=false;
+gBox.addEventListener('focus',()=>armed=true);gBox.addEventListener('blur',()=>{armed=false;G.keys={}});
+addEventListener('keydown',e=>{if(!armed)return;if(e.key.startsWith('Arrow')){e.preventDefault();G.keys[e.key]=true}else if(e.key===' '||e.key==='Enter'){if(G.state==='play'){e.preventDefault();G.input='key';G.snapReq=true}}});
+addEventListener('keyup',e=>{if(e.key.startsWith('Arrow'))G.keys[e.key]=false});
+$('gPlay').addEventListener('click',()=>{gBox.focus({preventScroll:true});startPlay(G.state!=='round')});
+hud();
+
+// ---- wallet for score logging (same connection as Go Squatching) ----
+// GAME_LOG_URL: your endpoint that saves {account, score, at}.
+const GAME_LOG_URL='';
+$('wConnect').addEventListener('click',async()=>{
+  if(!window.BLOBSQUATCH_WALLET){$('wStatus').textContent='Wallet connect turns on at launch.';return}
+  try{await connect()}catch(_){$('wStatus').textContent="Couldn't connect. Try again from your wallet app."}
+});
+function logPlay(score){if(!account||!GAME_LOG_URL)return;fetch(GAME_LOG_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account,score,at:Date.now()})}).catch(()=>{})}
+</script>

@@ -1,0 +1,14 @@
+const {chromium}=require('playwright');const fs=require('fs');
+(async()=>{const E=require('child_process').execSync('ls /opt/pw-browsers/chromium-1194/chrome-linux*/chrome | head -1').toString().trim();
+const b=await chromium.launch({executablePath:E});
+const html=fs.readFileSync(process.argv[2],'utf8');
+const wrap='<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>[hidden]{display:none!important}body{margin:0}</style><body>'+html+'</body>';
+const ctx=await b.newContext({viewport:{width:1000,height:900},recordVideo:{dir:'/tmp/claude-0/bq/vid/',size:{width:1000,height:900}}});
+const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.setContent(wrap);await p.waitForTimeout(700);
+await p.click('text=Pumping',{force:true});
+const sp=await p.$('#spot');await p.evaluate(()=>{const r=document.getElementById('spot').getBoundingClientRect();scrollBy(0,r.top-44)});await p.waitForTimeout(300);
+const bb=await sp.boundingBox();fs.writeFileSync('/tmp/claude-0/bq/vid/box.json',JSON.stringify(bb));
+await p.waitForTimeout(400);await sp.screenshot({path:'/tmp/claude-0/bq/vid/still.png'});
+await p.waitForTimeout(9000);
+console.log(errs);await ctx.close();await b.close()})();
