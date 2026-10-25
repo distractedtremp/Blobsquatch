@@ -1,6 +1,8 @@
 # Launch checklist
 
-Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come after launch, only if the coin gets traction. Timeline below assumes about two weeks of X warm-up before launch day; launching with no audience is the most common way meme coins die.
+Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come after launch, only if the coin gets traction.
+
+**Stealth launch (the owner's choice).** No countdown, no pre-launch hype. The coin appears on JustHoot and the X account starts posting the same hour. The warm-up posts in `LAUNCH_KIT.md` become the first two weeks of post-launch posts. Stealth works on a bonding curve (JustHoot) because the curve can sit and get discovered; it does not work on Meme.Cooking, whose auction needs a crowd on a set day. The risk is a silent launch that nobody finds, so the account and Telegram must be live and the posting starts the day of launch, not later.
 
 ## Only Guy can do these (in this order)
 
@@ -9,9 +11,10 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [ ] **GitHub Pages.** In the repo: Settings → Pages → Source: "GitHub Actions". Then add the domain under "Custom domain" and tick "Enforce HTTPS". Tell Claude the domain so it can add the CNAME file and wire the links.
 - [ ] **Wallet.** Make a fresh NEAR wallet for the project (Meteor or HOT). Fund it with enough NEAR for the launch fee plus your own first buy. Write the seed phrase down on paper; never paste it into any chat, including this one.
 - [ ] **Venue.** Pick JustHoot or Meme.Cooking (see the audit doc). Open the create-token page once before launch day to see the fee and the fields.
-- [ ] **Warm-up.** Post one warm-up post a day from `LAUNCH_KIT.md` for two weeks. Reply to every NEAR account that interacts. Follow and reply to 20 NEAR meme accounts a day.
-- [ ] **Launch crew.** Line up at least 20 people who will buy in the first 10 minutes and post about it. DM them the time the day before.
-- [ ] **Date.** Pick a weekday, 2 to 4 pm US Eastern, when the NEAR Twitter crowd is awake. Avoid big crypto news days.
+- [ ] **Accounts live before the launch.** X and Telegram exist with the bio, banner and pinned post, even if they have no followers yet.
+- [ ] **Date.** Any weekday, 2 to 4 pm US Eastern, when the NEAR Twitter crowd is awake.
+- [ ] **The first two weeks after launch.** One post a day from the kit. Reply under every big NEAR account's posts with a blurry photo. Follow and reply to 20 NEAR meme accounts a day. This replaces the warm-up.
+- [ ] **Ads.** Skip paid ads at first; replies and memes outperform them for meme coins. If anything, pay a NEAR meme account for one post after the chart has a few days of life.
 
 ## Claude does these
 
@@ -27,9 +30,9 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 1. Two hours before: post "Barry is loading film." Make sure the site is live and the pinned post is ready.
 2. Open the launchpad create page. Paste from `LAUNCH_KIT.md`: name, ticker, description, logo (`brand/logo-masked-512.png`), website, X, Telegram.
-3. On Meme.Cooking: set the auction length (1 to 4 hours is a reasonable event), the soft cap, and the team allocation (5%, with a cliff and vesting). On JustHoot: launch, then buy your own first position immediately.
+3. On JustHoot: launch, then buy your own first position immediately, before posting the address anywhere. (Meme.Cooking alternative if the plan changes: set the auction length, soft cap and a 5% vested team allocation.)
 4. Copy the contract address. Send it to Claude and post it on X and Telegram (contract alone in a reply so people can copy it).
-5. Ping the launch crew.
+5. Post the first three kit posts over the first hour.
 6. Reply to everything for three hours. Quote every meme.
 7. Once the pair exists on RHEA or Ref, send Claude the DexScreener link. The site goes live with the chart.
 8. Post the "first 100 squatchers" update when it happens.
