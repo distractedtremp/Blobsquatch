@@ -25,6 +25,12 @@ POSES = {
     'lookM': ('04-look-back.jpg', True),
     'front': ('02-mask-on-front.jpg', False),
     'held': ('01-mask-held-front.png', False),
+    # Pump dance and dump poses, generated in Canva from 02 (media ids MAHZD0yuaU0, MAHZD1UT4_c, MAHZD9Jkbcc, MAHZD7gQQTA).
+    # Any file that is missing is skipped, and the site falls back to the plain front view for that pose.
+    'danceA': ('05-dance-left-knee.png', False),
+    'danceB': ('06-dance-right-knee.png', False),
+    'squat': ('07-dance-squat.png', False),
+    'frozen': ('08-dump-frozen.png', False),
 }
 
 
@@ -70,7 +76,11 @@ def boil(im, seed):
 def main():
     os.makedirs(OUT, exist_ok=True)
     cache = {}
+    built = []
     for name, (fn, mirror) in POSES.items():
+        if not os.path.exists(os.path.join(SRC, fn)):
+            print('skip', name, '(no', fn + ')')
+            continue
         if fn not in cache:
             im = cutout(os.path.join(SRC, fn))
             cache[fn] = im.resize((round(im.width * H / im.height), H), Image.LANCZOS)
@@ -83,6 +93,10 @@ def main():
         for i in range(3):
             boil(canvas, 100 + i * 17).save(os.path.join(OUT, f'{name}-{i}.webp'), quality=82, method=6)
         print(name, canvas.size)
+        built.append(name)
+    # The site loads only the poses that exist, so a pose that hasn't been drawn yet falls back without 404s.
+    with open(os.path.join(OUT, 'manifest.js'), 'w') as f:
+        f.write('const SQ_POSES=' + str(built).replace("'", '"') + ';\n')
 
 
 if __name__ == '__main__':

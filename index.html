@@ -304,6 +304,7 @@ details.preview input{width:100%;accent-color:var(--accent)}
   </footer>
 </div>
 
+<script src="img/sq/manifest.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -319,21 +320,23 @@ const FONT_D='"Bagel Fat One", sans-serif';
 // he moves pose to pose, "on twos" (motion steps at 12 fps), and every pose has 3 boiled copies whose
 // outlines wobble differently, cycled 6 times a second like redrawn frames. Sprites: img/sq, built by tools/boil.py.
 const P={suit:'#483621',glove:'#373736',zip:'#00EC97'};
-const SQ_POSES=['back','backM','look','lookM','front','held'],SPR={};
+const SPR={}; // SQ_POSES comes from img/sq/manifest.js, written by tools/boil.py
 for(const k of SQ_POSES)SPR[k]=[0,1,2].map(i=>{const im=new Image();im.decoding='async';im.src=`img/sq/${k}-${i}.webp`;return im});
 const STEP=12,BOIL=6,SPR_PAD=4/648;
 const stp=t=>reduce?t:Math.floor(t*STEP)/STEP;     // hold each drawing for two 24 fps frames
 const boilI=t=>reduce?0:Math.floor(t*BOIL)%3;
 // draw a pose with its feet at (0,0), h tall, centered; clip=[y0,y1] draws only that band (fractions of h, 0 = feet)
 function pose(g,k,h,t,clip){
-  const im=SPR[k]&&SPR[k][boilI(t)];if(!(im&&im.complete&&im.naturalWidth))return;
+  let im=SPR[k]&&SPR[k][boilI(t)];
+  if(!(im&&im.complete&&im.naturalWidth)){ // a pose that hasn't been drawn yet falls back to the plain front view
+    if(k==='front'||!SPR.front)return;im=SPR.front[boilI(t)];if(!(im&&im.complete&&im.naturalWidth))return}
   const w=h*im.naturalWidth/im.naturalHeight,y=-h*(1-SPR_PAD);
   if(!clip){g.drawImage(im,-w/2,y,w,h);return}
   const sy=im.naturalHeight*(1-clip[1]),sh=im.naturalHeight*(clip[1]-clip[0]);
   g.drawImage(im,0,sy,im.naturalWidth,sh,-w/2,y+h*(1-clip[1]),w,h*(clip[1]-clip[0]));
 }
 // Blobsquatch, feet at (0,0), h tall, facing us (or away with o.back)
-// o: back, walk, bob, glance (0..1), gside (-1 looks to the viewer's left), tilt, squash, splay, unmasked
+// o: back, walk, bob, glance (0..1), gside (-1 looks to the viewer's left), tilt, squash, splay, unmasked, pose (a sprite key)
 function squatch(g,h,t,o){
   o=o||{};const tq=stp(t);
   g.save();g.translate(0,o.bob||0);
@@ -343,7 +346,7 @@ function squatch(g,h,t,o){
   if(o.back){
     if((o.glance||0)>.35)k=(o.gside||1)<0?'look':'lookM';   // the rehearsed look-back over his shoulder
     else k=o.walk&&Math.floor(tq*4)%2?'backM':'back';        // two-drawing walk: the stride and its mirror
-  }else k=o.unmasked?'held':'front';
+  }else k=o.unmasked?'held':o.pose||'front';
   pose(g,k,h,t);
   if(o.splay){g.translate(h*.17,0);pose(g,k,h,t,[0,.07])}   // a foot sticking out from behind the tree
   g.restore();
@@ -702,14 +705,14 @@ function showNFT(){
 let ph=0;
 // Pump: pose to pose on the beat (squat, hit left, squat, hit right), held on twos. On big pumps (k near 1)
 // the loose mask pops off every 8th beat and you see the guy inside.
-const BEATS=[{sq:.1,hop:0,tilt:0},{sq:-.07,hop:.07,tilt:-.11},{sq:.1,hop:0,tilt:0},{sq:-.07,hop:.07,tilt:.11}];
+const BEATS=[{pose:'squat',sq:.06,hop:0,tilt:0},{pose:'danceA',sq:-.05,hop:.07,tilt:-.08},{pose:'squat',sq:.06,hop:0,tilt:0},{pose:'danceB',sq:-.05,hop:.07,tilt:.08}];
 function scenePump(t,dt,k){
   drawForest(t,1,0,0,0,false,{noSq:true,candles:'up'}); // same deep woods as the squatching scene
   ph+=dt*(4+4*k);
   const beat=Math.floor(ph/(Math.PI/2)),b=reduce?BEATS[0]:BEATS[beat%4];
   const pop=!reduce&&k>.85&&beat%8===7;
   const h=H*.62,x=W*.68+(reduce?0:(beat%4-1.5)*W*.012),hop=b.hop*H;
-  drawSquatchAt(ctx,DPR,x,H*.985-hop,h,1,t,{squash:b.sq,tilt:b.tilt,unmasked:pop});
+  drawSquatchAt(ctx,DPR,x,H*.985-hop,h,1,t,{pose:b.pose,squash:b.sq,tilt:b.tilt,unmasked:pop});
   ctx.save();ctx.translate(W*.2,H*1.0);squatcher(ctx,H*.62,t,'frenzy');ctx.restore();
   if(!reduce&&((t*4.5)%1)<.08){ctx.fillStyle='rgba(255,250,230,.18)';ctx.fillRect(0,0,W,H)}
   overlay('PUMPING!',false,false);
@@ -717,11 +720,16 @@ function scenePump(t,dt,k){
 function sceneDump(t,dt,k){
   drawForest(t,1,0,0,0,false,{noSq:true,candles:'down',dark:.3});
   const tx=W*.69,h=H*.55,feet=H*.94;
-  drawSquatchAt(ctx,DPR,tx,feet,h,1,t,{splay:true});
-  // the tree he hides behind
-  const tw=h*.66;ctx.fillStyle='#2A2019';ctx.fillRect(tx-tw/2,feet-H*.95,tw,H*.95+h*.02);
-  ctx.fillStyle='#352920';for(let i=0;i<5;i++)ctx.fillRect(tx-tw/2+tw*(.12+i*.18),feet-H*.95,tw*.04,H*.95);
-  ctx.fillStyle=P.glove;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(tx+tw/2+h*.005,feet-h*(.6+i*.045),h*.028,h*.02,0,0,7);ctx.fill()}
+  if(SPR.frozen&&SPR.frozen[0].naturalWidth){ // "they're onto us": frozen stiff, both hands holding the mask on, pretending to be a stump
+    const sh=reduce?0:(Math.floor(t*STEP)%6===0?1:0); // a nervous twitch every half second
+    drawSquatchAt(ctx,DPR,tx+h*.3,feet,h,1,t,{pose:'frozen',squash:sh*.012});
+  }else{
+    drawSquatchAt(ctx,DPR,tx,feet,h,1,t,{splay:true});
+    // the tree he hides behind
+    const tw=h*.66;ctx.fillStyle='#2A2019';ctx.fillRect(tx-tw/2,feet-H*.95,tw,H*.95+h*.02);
+    ctx.fillStyle='#352920';for(let i=0;i<5;i++)ctx.fillRect(tx-tw/2+tw*(.12+i*.18),feet-H*.95,tw*.04,H*.95);
+    ctx.fillStyle=P.glove;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(tx+tw/2+h*.005,feet-h*(.6+i*.045),h*.028,h*.02,0,0,7);ctx.fill()}
+  }
   ctx.save();ctx.translate(W*.24,H*.99);squatcher(ctx,H*.6,t,'sleep');ctx.restore();
   const zs=2+Math.round(3*k);for(let i=0;i<zs;i++){const p=reduce?.4:((t*.4+i/zs)%1);ctx.globalAlpha=1-p;bigText(ctx,'z',W*.27+p*W*.07,H*.5-p*H*.3,H*(.045+i*.012),'#E8F0EA',0)}ctx.globalAlpha=1;
   overlay('',false,true);
