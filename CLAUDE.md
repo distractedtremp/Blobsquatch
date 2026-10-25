@@ -15,8 +15,8 @@ A **blobsquatch** is real Bigfoot-hunter slang for a blurry photo that's suppose
 
 ## Current status (read carefully)
 
-- **The website in `site/` is the OLD concept**, a fluffy pink Bigfoot. It works, and the owner likes the site's structure, scenes, game and copy flow. Treat it as the base to reskin and extend, not to throw away.
-- **The NEW concept is locked in art but not built into the site yet.** Blobsquatch is now a regular guy in a cheap brown Bigfoot costume, faking Bigfoot sightings with his buddy Barry. The character art is locked in `art/locked/`, in a crude "MS Paint degen meme" style.
+- **The website is `index.html` at the repo root** (static, no build step; sprites in `img/sq/`). It has been reskinned from the old pink Bigfoot to the costume guy, animated pose to pose "on twos" with line boil (see `tools/boil.py`). `site/versions/` keeps v14 and v15 for reference.
+- **The concept:** Blobsquatch is now a regular guy in a cheap brown Bigfoot costume, faking Bigfoot sightings with his buddy Barry. The character art is locked in `art/locked/`, in a crude "MS Paint degen meme" style.
 - **Next job:** rebuild the site around the new concept. Follow `docs/REDESIGN_PLAN.md`, and keep everything else about the current site the same unless the plan says otherwise.
 
 ## File map
