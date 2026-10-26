@@ -27,10 +27,11 @@ POSES = {
     'held': ('01-mask-held-front.png', False),
     # Pump dance and dump poses, generated in Canva from 02 (media ids MAHZD0yuaU0, MAHZD1UT4_c, MAHZD9Jkbcc, MAHZD7gQQTA).
     # Any file that is missing is skipped, and the site falls back to the plain front view for that pose.
-    'danceA': ('05-dance-left-knee.png', False),
-    'danceB': ('06-dance-right-knee.png', False),
-    'squat': ('07-dance-squat.png', False),
-    'frozen': ('08-dump-frozen.png', False),
+    # Two generations came out with the same knee up, so the other side is a mirror of 05 (only the zipper pull swaps shoulders).
+    'danceA': ('05-dance-knee-up.jpg', False),
+    'danceB': ('05-dance-knee-up.jpg', True),
+    'squat': ('07-dance-squat.jpg', False),
+    'frozen': ('08-dump-frozen.jpg', False),
 }
 
 

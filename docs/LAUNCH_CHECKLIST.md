@@ -8,7 +8,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 - [ ] **Accounts.** Make the X account and Telegram group (copy in `LAUNCH_KIT.md`). Turn on 2FA on both.
 - [ ] **Domain: blobsquatch.com** (bought on Hostinger). In Hostinger DNS add: `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `distractedtremp.github.io`.
-- [ ] **GitHub Pages.** In the repo: Settings → Pages → Source: "GitHub Actions". Then type `blobsquatch.com` under "Custom domain", wait for the DNS check, and tick "Enforce HTTPS". The repo already has the CNAME file.
+- [ ] **GitHub Pages.** The repo is private, and Pages on a free account needs a public repo, so first: repo Settings → General → scroll to "Danger Zone" → Change visibility → Public (the site is public anyway, and nothing secret is in the repo). While there, set the default branch to `main`. Then Settings → Pages (the repo's own settings, at github.com/distractedtremp/Blobsquatch/settings/pages, not the account-level Pages page) → Source: "GitHub Actions". Then type `blobsquatch.com` under "Custom domain", wait for the DNS check, and tick "Enforce HTTPS". The repo already has the CNAME file.
 - [ ] **Wallet.** Make a fresh NEAR wallet for the project (Meteor or HOT). Fund it with enough NEAR for the launch fee plus your own first buy. Write the seed phrase down on paper; never paste it into any chat, including this one.
 - [ ] **Venue.** Pick JustHoot or Meme.Cooking (see the audit doc). Open the create-token page once before launch day to see the fee and the fields.
 - [ ] **Accounts live before the launch.** X and Telegram exist with the bio, banner and pinned post, even if they have no followers yet.
