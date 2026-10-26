@@ -24,6 +24,7 @@ A **blobsquatch** is real Bigfoot-hunter slang for a blurry photo that's suppose
 | Path | What |
 |---|---|
 | `docs/STYLE_RULES.md` | **Hard art style rules (read before any art work).** Flat color, thick uneven outlines, no detail, rubbery proportions. |
+| `docs/BRAND_STORY.md` | The decision: NEAR mascot is the identity, GTA 6 is the launch wink. Copy drafts, petition design, launch timeline. |
 | `docs/PROJECT_BRIEF.md` | The coin, NFTs, launch, story and copy lines. The "why" behind everything. |
 | `docs/CHARACTER_BIBLE.md` | The locked character: rules, palette, style, the locked images and their Canva links, plus what's still needed. |
 | `docs/CURRENT_SITE_SPEC.md` | An exact spec of the current site: every section with copy verbatim, state machine, every scene, the game, a function index with line numbers, and quirks. |
