@@ -32,7 +32,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 >
 > Blobsquatch is the NEAR mascot nobody believes in. A guy in a $40 Bigfoot suit, Barry on camera, every photo a blur because a clear one would show the zipper.
 >
-> $BLOBSQUATCH launches on NEAR. Fair launch, locked liquidity, 0% tax, no presale.
+> $BLOBSQUATCH launches on NEAR. Fair launch, whole supply in the pool from block one, 0% tax, no presale.
 >
 > Go squatching: https://blobsquatch.com
 
@@ -44,7 +44,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 > Buy: (launchpad or RHEA link)
 > Chart: (DexScreener link)
 >
-> Liquidity locked. 0% tax. Every photo still a blur.
+> Whole supply in the pool. 0% tax. Every photo still a blur.
 >
 > In 2013 Rockstar put a guy in a Bigfoot suit in the woods and never gave him a name. We did. He is not in GTA 6. Yet. Report a sighting: https://blobsquatch.com/#sightings
 
@@ -60,7 +60,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 8. "He took his glasses off to wear the mask. He is NEARsighted. This explains a lot."
 9. "Why he runs when you get close: you'd see the zipper. Why NEAR: it's fast. Same reason."
 10. (Snap the Squatch gameplay clip) "Play Snap the Squatch. Far shots pay the most. Don't photograph bears. Or Barry."
-11. "Fair launch. Locked liquidity. 0% tax. No presale. The only hoax here is the costume."
+11. "Fair launch. Whole supply in the pool. 0% tax. No presale. The only hoax here is the costume."
 12. "Launch is (date). Set an alarm. Bring a camera, you won't need it."
 13. (Virgin Clear Photo vs Chad Blobsquatch meme) no caption
 14. "Tomorrow."
@@ -99,8 +99,8 @@ Use the game's name only to talk about the game. Never Rockstar logos, fonts, ch
 
 ## Replies to the questions people always ask
 
-- **Is this a rug?** Liquidity is locked by the launchpad and the team wallet is public. The hoax is the costume, not the coin.
-- **Presale? Airdrop?** No presale. An airdrop to NEAR holders is planned after launch, from the team allocation. Nothing is promised.
+- **Is this a rug?** The whole launch supply sits in a public pool from block one, the team holds nothing it did not buy, and the team wallet is posted. The hoax is the costume, not the coin.
+- **Presale? Airdrop?** No presale. An airdrop to NEAR holders is planned after launch, from what the team bought. Nothing is promised.
 - **What's the utility?** Blurry photos. Also a game, and NFTs after launch.
 - **Why NEAR?** No meme coin owns NEAR yet. Also, "you had to be NEAR" was too good to waste.
 - **Who's the team?** One artist and a guy in a suit.

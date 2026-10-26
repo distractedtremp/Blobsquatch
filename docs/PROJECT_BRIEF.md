@@ -8,9 +8,9 @@
 | Chain | NEAR. The owner's reasoning: NEAR has no meme frontrunner yet, so it's early. |
 | Supply | 1,000,000,000 |
 | Tax | 0% |
-| Liquidity | Locked |
+| Liquidity | Whole launch supply in a public pool from block one (JustHoot). Lock status unverified until the create page is checked. |
 | Distribution | Wide airdrop to active NEAR wallets. The size isn't decided: 10%, 15% or 20%. |
-| Team | About 5%, locked/vesting |
+| Team | No minted allocation on JustHoot. The team buys at launch from the posted team wallet, about 5% if the budget allows; no vesting contract, every move public. |
 | Squatcher Stash | 1% seeds the community fund. Stash "receipts" are shown on the site. |
 | Launch venue | Leaning toward a fair launch on Meme.Cooking. JustHoot, a NEAR launchpad, was also considered. Not final. |
 | Profit | The owner needs the project to be worth it financially. Merch comes later, and only if the coin/NFTs make money. A plush toy is a long-term goal. |
