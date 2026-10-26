@@ -1,5 +1,7 @@
 # Art pipeline
 
+**Read `docs/STYLE_RULES.md` first.** It is the hard style bar every image is judged against.
+
 ## Where the art comes from
 
 - **Character images are AI-generated**, with the Canva MCP `generate-image` tool or Google Gemini (the owner pastes prompts there), and then checked and fixed by hand in code.

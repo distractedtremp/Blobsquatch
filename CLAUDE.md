@@ -23,6 +23,7 @@ A **blobsquatch** is real Bigfoot-hunter slang for a blurry photo that's suppose
 
 | Path | What |
 |---|---|
+| `docs/STYLE_RULES.md` | **Hard art style rules (read before any art work).** Flat color, thick uneven outlines, no detail, rubbery proportions. |
 | `docs/PROJECT_BRIEF.md` | The coin, NFTs, launch, story and copy lines. The "why" behind everything. |
 | `docs/CHARACTER_BIBLE.md` | The locked character: rules, palette, style, the locked images and their Canva links, plus what's still needed. |
 | `docs/CURRENT_SITE_SPEC.md` | An exact spec of the current site: every section with copy verbatim, state machine, every scene, the game, a function index with line numbers, and quirks. |
