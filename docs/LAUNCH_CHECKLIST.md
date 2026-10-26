@@ -7,8 +7,8 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 ## Only Guy can do these (in this order)
 
 - [ ] **Accounts.** Make the X account and Telegram group (copy in `LAUNCH_KIT.md`). Turn on 2FA on both.
-- [ ] **Domain.** Buy it on Hostinger. Then in Hostinger DNS add: `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `distractedtremp.github.io`.
-- [ ] **GitHub Pages.** In the repo: Settings → Pages → Source: "GitHub Actions". Then add the domain under "Custom domain" and tick "Enforce HTTPS". Tell Claude the domain so it can add the CNAME file and wire the links.
+- [ ] **Domain: blobsquatch.com** (bought on Hostinger). In Hostinger DNS add: `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `distractedtremp.github.io`.
+- [ ] **GitHub Pages.** In the repo: Settings → Pages → Source: "GitHub Actions". Then type `blobsquatch.com` under "Custom domain", wait for the DNS check, and tick "Enforce HTTPS". The repo already has the CNAME file.
 - [ ] **Wallet.** Make a fresh NEAR wallet for the project (Meteor or HOT). Fund it with enough NEAR for the launch fee plus your own first buy. Write the seed phrase down on paper; never paste it into any chat, including this one.
 - [ ] **Venue.** Pick JustHoot or Meme.Cooking (see the audit doc). Open the create-token page once before launch day to see the fee and the fields.
 - [ ] **Accounts live before the launch.** X and Telegram exist with the bio, banner and pinned post, even if they have no followers yet.
@@ -20,7 +20,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 - [x] Site reskinned and in the repo, deploy workflow ready.
 - [x] Logos, X banner, token metadata, bios, posts, Telegram copy.
-- [ ] Add the CNAME file and real links when Guy sends the domain and handles.
+- [x] CNAME file, blobsquatch.com, @blobsquatch and t.me/blobsquatch wired into the site and kit.
 - [ ] Virgin-vs-Chad meme and sticker crops.
 - [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.

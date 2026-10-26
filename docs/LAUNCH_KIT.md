@@ -10,21 +10,21 @@ Everything here is ready to paste. Keep the voice deadpan. The joke is always on
 | Ticker | BLOBSQUATCH |
 | Logo | `brand/logo-masked-512.png` (the masked face, eyes showing) |
 | Description | A guy in a cheap Bigfoot suit faking sightings with his buddy Barry since 1967. Every photo is a blur. That's on purpose. You had to be NEAR. |
-| Website | (your domain) |
-| X | (your handle) |
-| Telegram | (your group link) |
+| Website | https://blobsquatch.com |
+| X | https://x.com/blobsquatch |
+| Telegram | https://t.me/blobsquatch |
 
 Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every photo is a blur on purpose. You had to be NEAR.`
 
 ## X profile
 
 - **Name:** Blobsquatch
-- **Handle:** @blobsquatch if free, else @blobsquatchnear or @squatchonnear
+- **Handle:** @blobsquatch (handles are case-insensitive; the display name "Blobsquatch" carries the capital)
 - **Bio:** `A guy in a Bigfoot suit. Barry takes the photos. Every one is a blur, on purpose. $BLOBSQUATCH on NEAR. You had to be NEAR.`
 - **Profile picture:** `brand/logo-masked-512.png`
 - **Banner:** `brand/x-banner-1500x500.png`
 - **Location:** The woods, probably
-- **Link:** the website
+- **Link:** https://blobsquatch.com
 
 ## Pinned post (before launch)
 
@@ -34,7 +34,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 >
 > $BLOBSQUATCH launches on NEAR. Fair launch, locked liquidity, 0% tax, no presale.
 >
-> Go squatching: (website)
+> Go squatching: https://blobsquatch.com
 
 ## Pinned post (after launch)
 
@@ -78,7 +78,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 > $BLOBSQUATCH is a meme coin on NEAR. A guy in a Bigfoot suit, his buddy Barry, and a lot of blurry photos.
 >
 > Contract: (address)
-> Site: (website)
+> Site: https://blobsquatch.com
 > Buy: (link)
 >
 > Rules: no shilling other coins, no DMs from "admins" (we never DM first), be funny or be quiet. Nothing here is financial advice, and nothing is promised.
