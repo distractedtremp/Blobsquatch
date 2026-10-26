@@ -1,6 +1,8 @@
 # Style rules (hard). Read before generating or judging ANY art.
 
-The target is the look of late-90s Cartoon Network cel animation, Ed, Edd n Eddy specifically. The owner's reference stills are in the shared project folder at `reference/eene-stills/` (not in this public repo: they are someone else's copyrighted frames and are a study reference only, never to be traced or copied). Judge every new image against those stills, never against the previous pass.
+**Current target (owner's call, 2026-10-26, supersedes the cartoon target below):** the clean internet-meme comic look of itsaltseason.com ($ALTSZN): thin, consistent black vector outlines, flat solid fills, very light two-tone cel shading, realistic-but-slightly-exaggerated meme proportions, minimal detail, white background. Reference thumbnails are in Canva as media ids `MAHZHCcR-e8`, `MAHZHMWQH-w`, `MAHZHHGeCfI`, `MAHZHN5aNIs` (that site's assets are borrowed IP: Pepe, Popcat, Street Fighter, CryptoPunk; we take only the drawing style). The rules on flatness, no texture, the mask, the zipper green, the sly expression and the skin ring inside the eye holes all still apply. Line boil still works on it; lower the boil amplitude in `tools/boil.py` (AMP 2.4 to about 1.2) so clean lines wobble without looking sketchy.
+
+The earlier target was the look of late-90s Cartoon Network cel animation, Ed, Edd n Eddy specifically. The owner's reference stills are in the shared project folder at `reference/eene-stills/` (not in this public repo: they are someone else's copyrighted frames and are a study reference only, never to be traced or copied). Judge every new image against those stills, never against the previous pass.
 
 ## The rules
 

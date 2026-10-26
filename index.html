@@ -3,7 +3,7 @@
 <style>[hidden]{display:none!important}body{margin:0}</style>
 </head><body>
 <title>Blobsquatch ($BLOBSQUATCH) on NEAR</title>
-<meta name="description" content="A guy in a cheap Bigfoot suit faking sightings with his buddy Barry since 1967. Every photo is a blur. That's on purpose. You had to be NEAR.">
+<meta name="description" content="NEAR's mascot nobody believes in. A guy in a cheap Bigfoot suit, his buddy Barry on camera, every photo a blur on purpose. You had to be NEAR.">
 <link rel="icon" type="image/png" href="brand/logo-masked-512.png">
 <link rel="canonical" href="https://blobsquatch.com/">
 <meta property="og:title" content="Blobsquatch ($BLOBSQUATCH) on NEAR">
@@ -179,7 +179,7 @@ details.preview input{width:100%;accent-color:var(--accent)}
   <section class="hero">
     <h1>Nobody's gotten a <span class="blur">clear picture</span>. Yet.</h1>
     <p class="defn"><b><span class="b">blob</span>·squatch</b> <span class="pron">/ˈblɑbˌskwɑtʃ/</span> <i>noun.</i> A blurry photo someone swears is Bigfoot.</p>
-    <p class="lede">Every photo of Blobsquatch is a blur. That's on purpose. Barry has been getting a blurry shot since 1967. Go squatching with him.</p>
+    <p class="lede">Blobsquatch is the NEAR mascot nobody believes in. A guy in a $40 Bigfoot suit, his buddy Barry on camera, and fifty-nine years of blurry photos. Every chain has a meme coin. NEAR has a cryptid. You had to be NEAR.</p>
     <div class="ctas"><a class="btn" href="#buy">Buy $BLOBSQUATCH</a><a class="btn ghost" href="#game">Play Snap the Squatch</a></div>
     <div class="ca cachip"><span class="lbl">Contract</span><code id="caTop">Posted at launch</code><button class="copyBtn" data-target="caTop">Copy</button></div>
   </section>
@@ -200,6 +200,18 @@ details.preview input{width:100%;accent-color:var(--accent)}
     <div class="modes" id="preview" role="group" aria-label="Preview the chart modes"><span>Preview the chart:</span><button class="chip" data-pct="0" aria-pressed="true">Normal</button><button class="chip" data-pct="5" aria-pressed="false">Pumping</button><button class="chip" data-pct="-5" aria-pressed="false">Dumping</button></div>
     <p class="note">At launch the scene follows the real $BLOBSQUATCH chart. Up 2% in the last hour, they both lose it. Down 2%, Blobsquatch hides and Barry dozes off.</p>
     <p class="status" id="claimStatus" role="status"></p>
+  </section>
+
+  <section id="sightings">
+    <h2>The sighting record</h2>
+    <p class="sub">NEAR's mascot nobody believes in. Three sightings on record, none of them clear.</p>
+    <div class="nums three" aria-label="Sightings">
+      <div class="num"><span>1967</span><b>First blur</b><p>The first blurry photo. Barry swears the flash was an accident.</p></div>
+      <div class="num"><span>2013</span><b>Unmasked</b><p>Grand Theft Auto V put a guy in a Bigfoot costume in the woods, let you chase him down and pull the mask off, and never gave him a name.</p></div>
+      <div class="num"><span>2026</span><b>Named</b><p>We did. Blobsquatch is on NEAR. GTA 6 comes out November 19. He is not in it. Yet.</p></div>
+    </div>
+    <div class="ctas"><a class="btn" href="https://x.com/intent/post?text=I%20have%20seen%20Blobsquatch.%20%23BlobsquatchForGTA6%20%40BlobsquatchNEAR%20https%3A%2F%2Fblobsquatch.com" target="_blank" rel="noopener">Report a sighting</a><a class="btn ghost" href="https://x.com/search?q=%23BlobsquatchForGTA6&amp;f=live" target="_blank" rel="noopener">See the sighting log</a></div>
+    <p class="note" id="sightTally">No confirmed sightings. Yet.</p>
   </section>
 
   <section id="nft">
@@ -750,6 +762,8 @@ function sceneDump(t,dt,k){
 // ---- chart input ----
 // At launch: paste the $BLOBSQUATCH pair address from DexScreener (the Ref Finance pool) here.
 const PAIR='';
+const SIGHTINGS=0; // hand-updated from the #BlobsquatchForGTA6 count
+{const el=document.getElementById('sightTally');if(el&&SIGHTINGS>0)el.textContent=`${SIGHTINGS.toLocaleString()} sightings reported. Still no clear picture.`}
 const PUMP=2,DUMP=-2; // % change over the last hour
 let pct=0,live=false;
 document.querySelectorAll('#preview .chip').forEach(b=>b.addEventListener('click',()=>{

@@ -9,7 +9,7 @@ Everything here is ready to paste. Keep the voice deadpan. The joke is always on
 | Name | Blobsquatch |
 | Ticker | BLOBSQUATCH |
 | Logo | `brand/logo-masked-512.png` (the masked face, eyes showing) |
-| Description | A guy in a cheap Bigfoot suit faking sightings with his buddy Barry since 1967. Every photo is a blur. That's on purpose. You had to be NEAR. |
+| Description | NEAR's mascot nobody believes in. A guy in a cheap Bigfoot suit, his buddy Barry on camera, every photo a blur on purpose. You had to be NEAR. |
 | Website | https://blobsquatch.com |
 | X | https://x.com/BlobsquatchNEAR |
 | Telegram | https://t.me/blobsquatch |
@@ -20,7 +20,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 
 - **Name:** Blobsquatch
 - **Handle:** @BlobsquatchNEAR (@blobsquatch was taken; handles are case-insensitive, so the URL x.com/blobsquatchnear also works)
-- **Bio:** `A guy in a Bigfoot suit. Barry takes the photos. Every one is a blur, on purpose. $BLOBSQUATCH on NEAR. You had to be NEAR.`
+- **Bio:** `NEAR's mascot nobody believes in. Guy in a Bigfoot suit, Barry on camera, every photo a blur on purpose. $BLOBSQUATCH. You had to be NEAR.`
 - **Profile picture:** `brand/logo-masked-512.png`
 - **Banner:** `brand/x-banner-1500x500.png`
 - **Location:** The woods, probably
@@ -30,7 +30,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 
 > Nobody's gotten a clear picture. Yet.
 >
-> Blobsquatch is a guy in a $40 Bigfoot suit. Barry is his photographer. Every photo is blurry because a clear one would show the zipper.
+> Blobsquatch is the NEAR mascot nobody believes in. A guy in a $40 Bigfoot suit, Barry on camera, every photo a blur because a clear one would show the zipper.
 >
 > $BLOBSQUATCH launches on NEAR. Fair launch, locked liquidity, 0% tax, no presale.
 >
@@ -45,6 +45,8 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 > Chart: (DexScreener link)
 >
 > Liquidity locked. 0% tax. Every photo still a blur.
+>
+> In 2013 Rockstar put a guy in a Bigfoot suit in the woods and never gave him a name. We did. He is not in GTA 6. Yet. Report a sighting: https://blobsquatch.com/#sightings
 
 ## Warm-up posts (one a day for the two weeks before launch)
 
@@ -62,6 +64,18 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 12. "Launch is (date). Set an alarm. Bring a camera, you won't need it."
 13. (Virgin Clear Photo vs Chad Blobsquatch meme) no caption
 14. "Tomorrow."
+
+## Launch week and GTA 6 week (launch target Nov 10 to 12, GTA 6 lands Nov 19)
+
+Use the game's name only to talk about the game. Never Rockstar logos, fonts, characters, screenshots or footage, never "in talks" or "partnership."
+
+- Launch day: the after-launch pinned post, then "He's live on NEAR. He is not in GTA 6. Yet. #BlobsquatchForGTA6"
+- Launch +2 days: our own drawn re-enactment of the 2013 unmasking (Barry pulls the mask off) with "Rockstar did this in 2013 and never named him."
+- Nov 17: "Two days. Rockstar, he's right here."
+- Nov 18: "He wasn't in the trailer. Yet."
+- Nov 19 (GTA 6 day): "Blobsquatch did not make the cut. Barry is devastated. Still NEAR."
+- Nov 20: "Day one in Leonida: zero sightings. Suspicious."
+- Any day: quote every #BlobsquatchForGTA6 post. Weekly: "Sighting log: (count) reports. Still no clear picture."
 
 ## Launch day posts
 
