@@ -340,12 +340,16 @@ const fmt=n=>Math.round(n).toLocaleString('en-US');
 const FONT_D='"Bagel Fat One", sans-serif';
 
 /* ---------- characters ---------- */
-// Blobsquatch is the locked art (a guy in a cheap Bigfoot suit), one whole drawing per pose. No limb rigs:
+// Blobsquatch is the clean-meme art (a guy in a cheap Bigfoot suit), one whole drawing per pose. No limb rigs:
 // he moves pose to pose, "on twos" (motion steps at 12 fps), and every pose has 3 boiled copies whose
 // outlines wobble differently, cycled 6 times a second like redrawn frames. Sprites: img/sq, built by tools/boil.py.
 const P={suit:'#483621',glove:'#373736',zip:'#00EC97'};
 const SPR={}; // SQ_POSES comes from img/sq/manifest.js, written by tools/boil.py
-for(const k of SQ_POSES)SPR[k]=[0,1,2].map(i=>{const im=new Image();im.decoding='async';im.src=`img/sq/${k}-${i}.webp`;return im});
+for(const k of SQ_POSES)SPR[k]=[0,1,2].map(i=>{const im=new Image();im.decoding='async';im.onload=()=>{if(typeof gBg!=='undefined')gBg=null};im.src=`img/sq/${k}-${i}.webp`;return im});
+// scenery far away is the same drawing darkened into the night: 3 levels, made on first use and cached
+const DARK=[0,.5,.78],SPRD={};
+function darkened(im,k,lv){const key=k+'|'+lv;let c=SPRD[key];if(c)return c;c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const g=c.getContext('2d');
+  g.drawImage(im,0,0);g.globalCompositeOperation='source-atop';g.fillStyle=`rgba(6,20,26,${DARK[lv]})`;g.fillRect(0,0,c.width,c.height);return SPRD[key]=c}
 const STEP=12,BOIL=6,SPR_PAD=4/648;
 const stp=t=>reduce?t:Math.floor(t*STEP)/STEP;     // hold each drawing for two 24 fps frames
 const boilI=t=>reduce?0:Math.floor(t*BOIL)%3;
@@ -359,6 +363,12 @@ function pose(g,k,h,t,clip){
   const sy=im.naturalHeight*(1-clip[1]),sh=im.naturalHeight*(clip[1]-clip[0]);
   g.drawImage(im,0,sy,im.naturalWidth,sh,-w/2,y+h*(1-clip[1]),w,h*(clip[1]-clip[0]));
 }
+// any other sprite (Barry, scenery) with its bottom-center at (0,0), h tall; false when that key isn't loaded
+function spr(g,k,h,t,o){let im=SPR[k]&&SPR[k][boilI(t)];if(!(im&&im.complete&&im.naturalWidth))return false;o=o||{};const w=h*im.naturalWidth/im.naturalHeight;
+  if(o.dark){const lv=o.dark>.64?2:o.dark>.25?1:0;if(lv)im=darkened(im,k+boilI(t),lv)}
+  g.save();if(o.alpha!=null)g.globalAlpha*=o.alpha;if(o.filter&&'filter' in g)g.filter=o.filter;if(o.flip)g.scale(-1,1);g.drawImage(im,-w/2,-h*(1-SPR_PAD),w,h);g.restore();return true}
+const has=k=>!!(SPR[k]&&SPR[k][0]&&SPR[k][0].complete&&SPR[k][0].naturalWidth);
+let sceneT=0; // the scene clock, so scenery sprites boil along with the characters
 // Blobsquatch, feet at (0,0), h tall, facing us (or away with o.back)
 // o: back, walk, bob, glance (0..1), gside (-1 looks to the viewer's left), tilt, squash, splay, unmasked, pose (a sprite key)
 function squatch(g,h,t,o){
@@ -386,7 +396,21 @@ function camera(g,x,y,s){ // centered at x,y, faces right
   g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.arc(x+s*.56,y-s*.07,s*.06,0,7);g.fill();
 }
 // The Squatcher, feet at (0,0), h tall, facing right. mood: squint | watch | elated | frenzy | sleep
+// Barry, feet at (0,0), h tall. One drawing per mood from the clean-meme set; the code-drawn Barry below is the fallback.
 function squatcher(g,h,t,mood){
+  const key=mood==='sleep'?'barry-sleep':mood==='elated'?'barry-elated':(mood==='aim'||mood==='frenzy')?'barry-aim':'barry-watch';
+  if(!has(key)){squatcherVec(g,h,t,mood);return}
+  g.save();
+  if(mood==='sleep'){g.translate(0,reduce?0:Math.sin(t*1.6)*h*.004);spr(g,key,h*.72,t)}
+  else{
+    const jump=mood==='elated'&&!reduce?Math.abs(Math.sin(t*7))*h*.05:0;
+    const jit=mood==='frenzy'&&!reduce?Math.sin(t*45)*h*.006:0;
+    g.translate(jit,-jump);spr(g,key,h,t);
+    if(mood==='frenzy'){const fl=reduce?0:((t*4.5)%1);if(fl<.18){g.fillStyle=`rgba(255,250,220,${1-fl/.18})`;g.beginPath();g.arc(h*.12,-h*.8,h*.06,0,7);g.fill()}}
+  }
+  g.restore();
+}
+function squatcherVec(g,h,t,mood){
   g.save();g.lineCap='round';g.lineJoin='round';
   if(mood==='sleep'){sleeper(g,h,t);g.restore();return}
   const jump=mood==='elated'&&!reduce?Math.abs(Math.sin(t*7))*h*.05:0;
@@ -547,18 +571,24 @@ const FOREST=(()=>{let s=21;const r=()=>(s=(s*16807)%2147483647)/2147483647;cons
   for(let i=0;i<140;i++){const z=1+r()*30,x=(r()*2-1)*(2.5+z*.45),sz=.3+r()*.55;
     if(z>9.5&&z<14.5&&Math.abs(x-CLEAR_X)<1.0)continue;ferns.push({x,z,s:sz,seed:r()*99})}
   for(const [x,z,sz] of [[-.6,13.6,.6],[.15,13.4,.55],[.8,13.65,.6],[-.2,13.85,.5],[.45,13.9,.5]])ferns.push({x,z,s:sz,seed:x*10+z}); // ferns around his feet
+  for(const [x,z,sz] of [[-1.0,13.5,.4],[-.4,13.25,.35],[.35,13.2,.35],[1.0,13.5,.4],[1.35,13.95,.35],[-1.45,14.05,.35],[.6,12.6,.3],[-.7,12.5,.3]])ferns.push({x,z,s:sz,seed:x*7+z,g:true}); // grass tufts in the clearing
   for(let i=0;i<260;i++){const x=r(),y=Math.pow(r(),1.8)*.2;if(x>.66&&x<.86&&y<.17)continue;canopy.push({x,y,rx:.008+r()*.02,ry:.004+r()*.008,a:r()*3,c:r()})} // leaves, with a gap for the moon
   return {trunks,ferns,canopy}})();
 const mix3=(a,b,k)=>`rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')})`;
 const FOG=[30,58,68],LIT=[236,240,228];
 function P3(x,y,z,camZ){const d=z-camZ,f=H*FOV/d;return [W/2+x*f,H*.48+(EYE-y)*f,f,d]}
 function shade(base,d,FL){const fk=clamp((d-2)/24,0,1)*.9;let c=base.map((v,i)=>v+(FOG[i]-v)*fk);if(FL)c=c.map((v,i)=>v+(LIT[i]-v)*FL*clamp(1-d/7,0,1)*.8);return mix3(c,c,0)}
-function drawTrunk(T,camZ,FL){const [sx,sy,f,d]=P3(T.x,0,T.z,camZ);if(d<.3)return;const w=T.w*f;if(sx+w<-20||sx-w>W+20)return;
+function drawTrunk(T,camZ,FL){const [sx,sy,f,d]=P3(T.x,0,T.z,camZ);if(d<.3)return;const w=T.w*f;
+  if(T.z>16.5&&has('sc-pine1')){const key=['sc-pine1','sc-pine2','sc-pine3'][Math.round(T.w*100)%3],ph=(4.5+T.w*7)*f;if(sx+ph<-20||sx-ph>W+20)return;
+    ctx.save();ctx.translate(sx,sy);spr(ctx,key,ph,sceneT,{dark:.3+clamp((d-2)/24,0,1)*.7,flip:T.w*100%2>1});ctx.restore();return}
+  if(sx+w<-20||sx-w>W+20)return;
   ctx.fillStyle=shade([46,37,30],d,FL);ctx.fillRect(sx-w/2,-10,w,sy+10);
   ctx.beginPath();ctx.moveTo(sx-w*.8,sy);ctx.quadraticCurveTo(sx-w*.5,sy-w*.3,sx-w*.45,sy-w*.9);ctx.lineTo(sx+w*.45,sy-w*.9);ctx.quadraticCurveTo(sx+w*.5,sy-w*.3,sx+w*.8,sy);ctx.closePath();ctx.fill();
   if(d<14){ctx.fillStyle=`rgba(0,0,0,${.22*(1-d/14)})`;for(let k=0;k<3;k++)ctx.fillRect(sx-w/2+w*(.2+k*.25),-10,Math.max(1,w*.05),sy+10);
     ctx.fillStyle=`rgba(190,210,230,${.14*(1-d/14)})`;ctx.fillRect(sx+w*.36,-10,w*.12,sy+10)}}
 function drawFern(F,camZ,FL){const [sx,sy,f,d]=P3(F.x,0,F.z,camZ);if(d<.25)return;const s=F.s*f;if(sx+s<-20||sx-s>W+20)return;
+  const key=F.g?(F.seed%3<1?'sc-grass1':F.seed%3<2?'sc-grass2':'sc-grass3'):(F.seed%2<1?'sc-fern1':'sc-fern2');
+  if(has(key)){const fk=clamp((d-2)/24,0,1);ctx.save();ctx.translate(sx,sy);spr(ctx,key,s*(F.g?.9:1.3),sceneT,{dark:fk,alpha:1-fk*.3,flip:F.seed%5>2.5});ctx.restore();return}
   ctx.fillStyle=shade(F.seed%2>1?[30,74,44]:[24,62,38],d,FL);
   for(let i=0;i<7;i++){const a=-Math.PI/2+(i-3)*.34+Math.sin(F.seed+i)*.1,L=s*(.8+.25*Math.sin(F.seed*3+i));
     ctx.beginPath();ctx.ellipse(sx+Math.cos(a)*L*.5,sy+Math.sin(a)*L*.5,L*.55,L*.12,a,0,7);ctx.fill()}}
@@ -572,13 +602,14 @@ function drawBeam(camZ,FL){const [gx2,gy,f]=P3(CLEAR_X,0,SQZ+.6,camZ),bw=1.6*f,t
   const pool=ctx.createRadialGradient(gx2,gy,0,gx2,gy,bw*1.3);pool.addColorStop(0,'rgba(210,225,255,.22)');pool.addColorStop(1,'rgba(210,225,255,0)');ctx.fillStyle=pool;ctx.beginPath();ctx.ellipse(gx2,gy,bw*1.3,bw*.3,0,0,7);ctx.fill();ctx.restore()}
 function forestBackdrop(k){
   const sky=ctx.createLinearGradient(0,0,0,H*.5);sky.addColorStop(0,'#081226');sky.addColorStop(1,'#16343E');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H*.5);
-  ctx.fillStyle='#F3EBC8';ctx.beginPath();ctx.arc(W*.76,H*.1,H*.045,0,7);ctx.fill();
+  if(has('sc-moon')){ctx.save();ctx.translate(W*.76,H*.155);spr(ctx,'sc-moon',H*.11,sceneT);ctx.restore()}
+  else{ctx.fillStyle='#F3EBC8';ctx.beginPath();ctx.arc(W*.76,H*.1,H*.045,0,7);ctx.fill()}
   const gg=ctx.createLinearGradient(0,H*.48,0,H);gg.addColorStop(0,'#1A3530');gg.addColorStop(1,'#0B1912');ctx.fillStyle=gg;ctx.fillRect(0,H*.48,W,H*.52);
   const fog=ctx.createLinearGradient(0,H*.3,0,H*.62);fog.addColorStop(0,'rgba(30,58,68,0)');fog.addColorStop(.6,'rgba(40,70,80,.55)');fog.addColorStop(1,'rgba(30,58,68,0)');ctx.fillStyle=fog;ctx.fillRect(0,H*.3,W,H*.32);
 }
 function forestCanopy(k){const sc=1+.08*k;for(const c of FOREST.canopy){ctx.fillStyle=c.c<.4?'#0A1C1A':c.c<.75?'#0E2620':'#12302A';ctx.beginPath();ctx.ellipse((c.x-.5)*W*sc+W/2,c.y*H*sc,c.rx*W*sc*2.2,c.ry*W*sc*2.2,c.a,0,7);ctx.fill()}}
 function drawForest(t,k,FL,sqx,glance,walking,o={}){
-  const camZ=DOLLY*k;
+  const camZ=DOLLY*k;sceneT=t;
   forestBackdrop(k);
   if(o.candles)candles(ctx,W,H,o.candles==='up');
   const items=[];
@@ -586,6 +617,7 @@ function drawForest(t,k,FL,sqx,glance,walking,o={}){
   for(const F of FOREST.ferns)items.push({z:F.z,f:()=>drawFern(F,camZ,FL)});
   items.push({z:SQZ+.6,f:()=>drawBeam(camZ,FL)});
   items.push({z:3.2,f:()=>drawLog(camZ,FL)});
+  items.push({z:15.8,f:()=>{if(!has('sc-deadtree'))return;const [sx,sy,f,d]=P3(-2.3,0,15.8,camZ);if(d<.3)return;ctx.save();ctx.translate(sx,sy);spr(ctx,'sc-deadtree',5.5*f,sceneT,{dark:.3+clamp((d-2)/24,0,1)*.5});ctx.restore()}});
   let box=null;
   if(!o.noSq)items.push({z:SQZ,f:()=>{const [sx,sy,f,d]=P3(sqx,0,SQZ,camZ),h=SQ_H*f,q=lerp(.13,1,Math.pow(k,1.4));
     const bob=walking?-Math.abs(Math.sin(stp(t)*(k>.5?3:5)*Math.PI/2))*h*.02:0;
@@ -600,6 +632,7 @@ function drawForest(t,k,FL,sqx,glance,walking,o={}){
 function foreFerns(t,k,bobY){ // the ferns right in front of you and Barry
   const sway=reduce?0:Math.sin(t*1.3)*.05;
   for(const [fx,fy,s,seed] of [[.06,1.04,.24,1],[.22,1.06,.2,2],[.92,1.05,.26,3],[.78,1.08,.18,4]]){
+    if(has('sc-fern1')){ctx.save();ctx.translate(fx*W,fy*H+bobY);ctx.rotate(sway*.5);spr(ctx,seed%2?'sc-fern1':'sc-fern2',s*H*2.2,t,{dark:.7,flip:seed>2});ctx.restore();continue}
     ctx.fillStyle=seed%2?'#0C2216':'#0F2A1B';const x=fx*W,y=fy*H+bobY,L0=s*H;
     for(let i=0;i<8;i++){const a=-Math.PI/2+(i-3.5)*.3+sway,L=L0*(.8+.2*Math.sin(seed*3+i));ctx.beginPath();ctx.ellipse(x+Math.cos(a)*L*.5,y+Math.sin(a)*L*.5,L*.55,L*.13,a,0,7);ctx.fill()}}}
 function viewfinder(b){const {x,y,h}=b,w=h*.42,top=y-h*1.08,bot=y-h*.02,c=h*.12;
@@ -630,8 +663,9 @@ function sceneSquatching(t,dt){
   foreFerns(t,k,creep*.6);
   if(S.mode==='twig'||S.mode==='glance'){
     const tx=bx+rh*.2,ty=H*.975,s=H*.05;
-    ctx.strokeStyle='#8A6040';ctx.lineWidth=Math.max(2,H*.009);ctx.lineCap='round';ctx.beginPath();
-    ctx.moveTo(tx-s,ty);ctx.lineTo(tx-s*.08,ty-s*.18);ctx.moveTo(tx+s*.08,ty-s*.18);ctx.lineTo(tx+s,ty);ctx.stroke();
+    if(has('sc-twig')){ctx.save();ctx.translate(tx,ty);spr(ctx,'sc-twig',s*.9,t);ctx.restore()}
+    else{ctx.strokeStyle='#8A6040';ctx.lineWidth=Math.max(2,H*.009);ctx.lineCap='round';ctx.beginPath();
+      ctx.moveTo(tx-s,ty);ctx.lineTo(tx-s*.08,ty-s*.18);ctx.moveTo(tx+s*.08,ty-s*.18);ctx.lineTo(tx+s,ty);ctx.stroke()}
     if(S.mode==='twig'){ctx.strokeStyle='#FFC65C';ctx.lineWidth=Math.max(1.5,H*.004);ctx.beginPath();
       for(const a of [-2.2,-1.57,-.9]){ctx.moveTo(tx+Math.cos(a)*s*.35,ty-s*.2+Math.sin(a)*s*.35);ctx.lineTo(tx+Math.cos(a)*s*.7,ty-s*.2+Math.sin(a)*s*.7)}ctx.stroke();
       bigText(ctx,'snap!',tx,ty-s*1.6,H*.045,'#FFC65C',-.12)}
@@ -755,7 +789,7 @@ function sceneDump(t,dt,k){
     ctx.fillStyle=P.glove;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(tx+tw/2+h*.005,feet-h*(.6+i*.045),h*.028,h*.02,0,0,7);ctx.fill()}
   }
   ctx.save();ctx.translate(W*.24,H*.99);squatcher(ctx,H*.6,t,'sleep');ctx.restore();
-  const zs=2+Math.round(3*k);for(let i=0;i<zs;i++){const p=reduce?.4:((t*.4+i/zs)%1);ctx.globalAlpha=1-p;bigText(ctx,'z',W*.27+p*W*.07,H*.5-p*H*.3,H*(.045+i*.012),'#E8F0EA',0)}ctx.globalAlpha=1;
+  const zs=2+Math.round(3*k);for(let i=0;i<zs;i++){const p=reduce?.4:((t*.4+i/zs)%1);ctx.globalAlpha=1-p;bigText(ctx,'z',W*.15+p*W*.06,H*.6-p*H*.3,H*(.045+i*.012),'#E8F0EA',0)}ctx.globalAlpha=1;
   overlay('',false,true);
 }
 
@@ -865,6 +899,7 @@ function buildGameArt(){
   for(let i=0;i<3;i++){const L=lay(i);b.fillStyle=`rgba(0,0,0,${.12+i*.05})`;b.beginPath();b.ellipse(W/2,L.y+L.hh*.02,W*.8,L.hh*.08,0,0,7);b.fill()}
   gTrees=LAYERS.map((_,i)=>{const L=lay(i),c=document.createElement('canvas');c.width=gcv.width;c.height=gcv.height;const g=c.getContext('2d');g.setTransform(GD,0,0,GD,0,0);
     for(const tf of L.trees){const x=tf*W,top=i===2?-10:L.y-L.hh*(i===0?1.7:1.5);
+      if(i<2&&has('sc-pine1')){const key=['sc-pine1','sc-pine2','sc-pine3'][Math.round(tf*10)%3];g.save();g.translate(x,L.y+L.hh*.02);spr(g,key,L.hh*(i===0?2.0:1.7),0,{dark:i===0?.6:.3,flip:Math.round(tf*10)%2===1});g.restore();continue}
       g.fillStyle=L.bark;g.fillRect(x-L.tw/2,top,L.tw,L.y-top+L.hh*.02);
       g.fillStyle='rgba(0,0,0,.18)';for(let k=0;k<4;k++)g.fillRect(x-L.tw/2+L.tw*(.15+k*.22),top,L.tw*.05,L.y-top);
       g.fillStyle='rgba(255,255,255,.04)';g.fillRect(x-L.tw/2,top,L.tw*.12,L.y-top);
