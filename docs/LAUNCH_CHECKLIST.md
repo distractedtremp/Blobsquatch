@@ -20,7 +20,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 - [x] Site reskinned and in the repo, deploy workflow ready.
 - [x] Logos, X banner, token metadata, bios, posts, Telegram copy.
-- [x] CNAME file, blobsquatch.com, @blobsquatch and t.me/blobsquatch wired into the site and kit.
+- [x] CNAME file, blobsquatch.com, @BlobsquatchNEAR and t.me/blobsquatch wired into the site and kit.
 - [ ] Virgin-vs-Chad meme and sticker crops.
 - [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.

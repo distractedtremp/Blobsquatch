@@ -11,7 +11,7 @@ Everything here is ready to paste. Keep the voice deadpan. The joke is always on
 | Logo | `brand/logo-masked-512.png` (the masked face, eyes showing) |
 | Description | A guy in a cheap Bigfoot suit faking sightings with his buddy Barry since 1967. Every photo is a blur. That's on purpose. You had to be NEAR. |
 | Website | https://blobsquatch.com |
-| X | https://x.com/blobsquatch |
+| X | https://x.com/BlobsquatchNEAR |
 | Telegram | https://t.me/blobsquatch |
 
 Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every photo is a blur on purpose. You had to be NEAR.`
@@ -19,7 +19,7 @@ Short description fallback (under 100 characters): `Guy in a Bigfoot suit. Every
 ## X profile
 
 - **Name:** Blobsquatch
-- **Handle:** @blobsquatch (handles are case-insensitive; the display name "Blobsquatch" carries the capital)
+- **Handle:** @BlobsquatchNEAR (@blobsquatch was taken; handles are case-insensitive, so the URL x.com/blobsquatchnear also works)
 - **Bio:** `A guy in a Bigfoot suit. Barry takes the photos. Every one is a blur, on purpose. $BLOBSQUATCH on NEAR. You had to be NEAR.`
 - **Profile picture:** `brand/logo-masked-512.png`
 - **Banner:** `brand/x-banner-1500x500.png`
