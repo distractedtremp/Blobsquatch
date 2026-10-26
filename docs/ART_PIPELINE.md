@@ -21,7 +21,10 @@
    - It draws harsh red lines that look like cuts.
 8. **Small local fixes:** do them in Python, not with another AI pass. The forehead line on `01-mask-held-front.png` was fixed this way by inpainting the red pixels from neighbouring skin and painting a soft pink band.
 9. **Compare every new image to its source** before judging it, and describe specifically what changed.
-10. **Plain flat background** (light gray `#D9D4CC`-ish or plain dark teal) makes cut-outs easy.
+10. **Do not name "Ed, Edd n Eddy" (or any show) in a Canva prompt.** The copyright filter rejects it. Say "late-1990s Cartoon Network feel, thick wobbly uneven outlines, flat paint-bucket colors" instead.
+11. **Expression:** sly trickster, never "deadpan". The locked-image prompts below say deadpan; that wording is superseded (see the Character Bible).
+12. **Masked poses generated from the unmasked master turn the mask into a hood.** Reference the mask image (`MAHY78CiSoA`) together with the style master (`MAHY8OOSQ6k`), and still check the cone top and fur.
+13. **Plain flat background** (light gray `#D9D4CC`-ish or plain dark teal) makes cut-outs easy.
 
 ## Prompts that produced the locked images
 
@@ -41,6 +44,10 @@ The Canva tool takes `imageReferences` (Canva media IDs) and an `aspectRatio` of
 
 **Bigfoot-not-gorilla mask** (the fix that worked):
 > ...a classic Bigfoot / Sasquatch head, not a gorilla. A bit bigger than his own head. A tall, pointed, cone-shaped peaked top covered in shaggy dark brown fur; long shaggy brown fur covering the cheeks, jaw and around the whole face, so only a small bare charcoal-gray area shows around the eyes, nose and mouth; a sloping forehead with a heavy brow; two deep-set empty black eye holes; a flat, wide, short nose with no snout and no big nostrils; a flat face with no protruding muzzle; a thin, straight, almost human mouth...
+
+## Scenery and Barry
+
+Barry and the forest are code-drawn vector art and do not match the hand-drawn character. They are being replaced with flat, thick-outline sprites run through `tools/boil.py`. First Canva passes (2026-10-26): Barry standing `MAHZFEWNtwI`, Barry aiming `MAHZFLg6JxQ`, scenery sheet `MAHZFPlyqqc` (pines, dead tree, ferns, moon, twig, grass). The owner may redraw these by hand instead.
 
 ## How sprites were built for the current site (v15) — reuse the approach
 
