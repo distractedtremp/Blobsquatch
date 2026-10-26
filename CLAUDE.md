@@ -16,7 +16,7 @@ A **blobsquatch** is real Bigfoot-hunter slang for a blurry photo that's suppose
 ## Current status (read carefully)
 
 - **The website is `index.html` at the repo root** (static, no build step; sprites in `img/sq/`). It has been reskinned from the old pink Bigfoot to the costume guy, animated pose to pose "on twos" with line boil (see `tools/boil.py`). `site/versions/` keeps v14 and v15 for reference.
-- **The concept:** Blobsquatch is now a regular guy in a cheap brown Bigfoot costume, faking Bigfoot sightings with his buddy Barry. The character art is locked in `art/locked/`, in a crude "MS Paint degen meme" style.
+- **The concept:** Blobsquatch is now a regular guy in a cheap brown Bigfoot costume, faking Bigfoot sightings with his buddy Barry. The current art is the clean-meme set in `art/candidates/clean-meme/` (style: `docs/STYLE_RULES.md`, top paragraph); `art/locked/` holds the earlier MS-Paint-style set it replaced.
 - **Next job:** rebuild the site around the new concept. Follow `docs/REDESIGN_PLAN.md`, and keep everything else about the current site the same unless the plan says otherwise.
 
 ## File map
@@ -39,7 +39,7 @@ A **blobsquatch** is real Bigfoot-hunter slang for a blurry photo that's suppose
 | `screenshots/` | 26 screenshots of the current site in every state (hero, pump, dump, game, NFTs). |
 | `art/locked/` | The locked new-concept character images. |
 | `art/history/` | Rejected or superseded art, kept for reference only. It includes the realistic costume version that proved the concept, the gorilla-mask and too-big-shoulders versions, and the old pink master. |
-| `tools/` | Playwright screenshot/recording scripts and the Python sprite-cutting scripts used to build v15. Their paths are hard-coded from the old workspace, so update them before running. |
+| `tools/` | `boil.py` (cuts the art into boiled sprites in `img/sq/`), `brand.py` (logos, stickers, banner, memes), plus Playwright screenshot/recording scripts with paths from the old workspace, so update those before running. |
 | `PUMP IT ...mp4`, `Pump it up ...mp4` | The owner's reference videos for the "Pump It" trend dance, the vibe for the pump scene. |
 | Loose `.jpg`/`.png` in the root | The owner's own downloads of the locked art. Don't move or delete them. |
 

@@ -6,7 +6,8 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 ## Only Guy can do these (in this order)
 
-- [ ] **Download the art keepers.** Open the Canva links in `ART_PIPELINE.md` ("The clean-meme set") and download each at full size into `art/candidates/clean-meme/`. Claude cannot download from Canva. Then Claude cuts, animates and re-records the clips (about a day).
+- [x] **Download the art keepers.** Done 2026-10-26 (Remote Control session); they are in `art/candidates/clean-meme/`.
+- [ ] **Go or no on the new art.** Look at the preview PR and the clips in the shared folder under `launch/v2/`. On "go" Claude merges and the site, logo and kit switch to the new set; the X profile picture is then the new `brand/logo-masked-512.png`.
 - [x] **X account.** @BlobsquatchNEAR exists (2026-10-26). Turn on 2FA. Leave the profile picture alone until the face is final; Claude will say when.
 - [ ] **Telegram group.** t.me/blobsquatch, copy in `LAUNCH_KIT.md`. Turn on 2FA.
 - [x] **Domain: blobsquatch.com** (Hostinger). DNS set 2026-10-26, live over HTTPS.
@@ -16,7 +17,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [x] **Venue: JustHoot** (decided 2026-10-26; Meme.Cooking stays the fallback).
 - [ ] **Dry run.** Open JustHoot's create-token page once before launch day to see the fee and the fields. Do not submit. Note whether it says the pool's LP is locked or burned; nobody's public guide says, so the site and kit now say "whole supply in the pool" instead of "liquidity locked". If the page confirms a lock, tell Claude and the word goes back in.
 - [ ] **Accounts live before the launch.** X and Telegram carry the bio, banner and pinned post, even with no followers yet.
-- [ ] **Logo and profile picture in the final style.** Claude redraws the token logo, stickers and X profile picture from the final front pose once the keepers are downloaded; Guy uploads the X one then. The current logo is the old costume guy.
+- [ ] **Profile picture.** After the "go", upload `brand/logo-masked-512.png` (new face) to X. Only then; X limits changes.
 - [ ] **Date.** Target November 10 to 12, 2026 (a weekday, 2 to 4 pm US Eastern), so the coin has a week of life before GTA 6 lands on November 19 and the sighting-petition bit peaks. See `BRAND_STORY.md`.
 - [ ] **The first two weeks after launch.** One post a day from the kit. Reply under every big NEAR account's posts with a blurry photo. Follow and reply to 20 NEAR meme accounts a day. This replaces the warm-up.
 - [ ] **Ads.** Skip paid ads at first; replies and memes outperform them for meme coins. If anything, pay a NEAR meme account for one post after the chart has a few days of life.
@@ -26,8 +27,9 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [x] Site reskinned and in the repo, deploy workflow ready.
 - [x] Logos, X banner, token metadata, bios, posts, Telegram copy.
 - [x] CNAME file, blobsquatch.com, @BlobsquatchNEAR and t.me/blobsquatch wired into the site and kit.
-- [ ] Logo, stickers, Virgin-vs-Chad meme and X profile picture redone in the clean-meme style (after the keepers are downloaded).
-- [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
+- [x] Logo, stickers, banner and meme templates redone in the clean-meme style (`tools/brand.py`, waiting in the preview PR).
+- [ ] Virgin-vs-Chad meme.
+- [x] Short clips of the hero snap and pump dance for X (re-recorded with the new art; shared folder `launch/v2/`).
 - [x] NEAR-first copy and the sighting log on the site (live 2026-10-26; the tally is the `SIGHTINGS` constant in `index.html`, update it by hand from the #BlobsquatchForGTA6 count).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.
 - [ ] After launch: add the buy link to every "Buy $BLOBSQUATCH" button.

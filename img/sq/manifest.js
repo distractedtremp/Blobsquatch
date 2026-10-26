@@ -1,1 +1,1 @@
-const SQ_POSES=["back", "backM", "look", "lookM", "front", "held", "danceA", "danceB", "squat", "frozen"];
+const SQ_POSES=["back", "backM", "look", "lookM", "front", "held", "danceA", "danceB", "squat", "frozen", "barry-watch", "barry-aim", "barry-elated", "barry-sleep", "sc-pine1", "sc-pine2", "sc-pine3", "sc-deadtree", "sc-fern1", "sc-fern2", "sc-moon", "sc-twig", "sc-grass1", "sc-grass2", "sc-grass3", "sc-chair"];
