@@ -791,7 +791,7 @@ const LAYERS=[
   {name:'NEAR',base:1.05,h:.5,pts:50,ft:.25,q:.8,trees:[.03,.97],bark:'#30261D',crown:'#12301F'}];
 const lay=i=>{const L=LAYERS[i];return {...L,y:L.base*GH,hh:L.h*GH,tw:L.h*GH*(i===2?.8:.9)}};
 const SIGHTS=10,NEED=r=>Math.min(3+r,8);
-const G={state:'ready',round:1,sight:0,clear:0,score:0,best:0,film:3,cool:0,flash:0,focus:0,aim:{x:0,y:0},keys:{},holding:false,input:'mouse',
+const G={state:'ready',round:1,sight:0,clear:0,score:0,best:0,film:3,cool:0,flash:0,hold:0,holdT:0,focus:0,aim:{x:0,y:0},keys:{},holding:false,input:'mouse',
   actor:null,gap:1,barry:null,barryT:9,laugh:null,pops:[],snapReq:false,paused:false,roundBest:null,lastDecoy:false};
 try{G.best=+localStorage.getItem('snapSquatchBest')||0}catch(_){}
 $('gBest').textContent=fmt(G.best);
@@ -880,7 +880,7 @@ function capture(a,s,pts,label){
 }
 function doSnap(){
   if(G.state!=='play'||G.cool>0||G.film<=0)return;
-  G.film--;G.cool=.45;G.flash=1;const {x,y}=G.aim,a=G.actor;
+  G.film--;G.cool=.45;G.flash=1;G.hold=reduce?0:.5;G.holdT=gt;const {x,y}=G.aim,a=G.actor;
   if(onBarry(x,y)){G.score=Math.max(0,G.score-50);pop(x,y,"That's Barry. −50",'#FF8A8A')}
   else if(a&&!a.snapped&&onActor(x,y,a)){
     if(a.kind==='bear'){G.score=Math.max(0,G.score-50);pop(x,y,"That's a bear. −50",'#FF8A8A')}
@@ -920,7 +920,8 @@ function gframe(now){
     if(G.state==='play'){
       const kx=(G.keys.ArrowRight?1:0)-(G.keys.ArrowLeft?1:0),ky=(G.keys.ArrowDown?1:0)-(G.keys.ArrowUp?1:0);
       if(kx||ky){G.input='key';G.aim.x=clamp(G.aim.x+kx*GW*.6*dt,0,GW);G.aim.y=clamp(G.aim.y+ky*GW*.6*dt,0,GH)}
-      if(G.actor){stepActor(G.actor,dt);if(G.actor.done){endSighting(G.actor);G.actor=null}}
+      if(G.hold>0)G.hold-=dt; // the photo beat: he holds dead still (no step, no boil) while the flash fades
+      else if(G.actor){stepActor(G.actor,dt);if(G.actor.done){endSighting(G.actor);G.actor=null}}
       else if(G.laugh){G.laugh.t+=dt;if(G.laugh.t>1.4)G.laugh=null}
       else{G.gap-=dt;if(G.gap<=0){if(G.sight>=SIGHTS)roundEnd();else startGameSighting()}}
       G.barryT-=dt;if(!G.barry&&G.barryT<=0)G.barry={fx:-.15};
@@ -933,7 +934,7 @@ function gframe(now){
     gx.drawImage(gBg,0,0,GW,GH);
     const aimed=G.actor&&!G.actor.snapped&&onActor(G.aim.x,G.aim.y,G.actor);
     for(let i=0;i<3;i++){
-      if(G.actor&&G.actor.li===i)drawActorAt(G.actor,gt,aimed?G.focus:0);
+      if(G.actor&&G.actor.li===i)drawActorAt(G.actor,G.hold>0?G.holdT:gt,aimed?G.focus:0);
       if(G.laugh&&i===1){const l=G.laugh.a;drawActorAt(l,gt*3,1);const L=lay(1);bigText(gx,'HA HA!',l.fx*GW,L.y-L.hh*1.25,GH*.06,'#F3CCAA',-.05)}
       gx.drawImage(gTrees[i],0,0,GW,GH);
     }
