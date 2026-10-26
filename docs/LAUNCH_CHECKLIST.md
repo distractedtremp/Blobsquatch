@@ -6,6 +6,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 ## Only Guy can do these (in this order)
 
+- [ ] **Download the art keepers.** Open the twelve Canva links in `ART_PIPELINE.md` ("The clean-meme set") and download each at full size into `art/candidates/clean-meme/`. Claude cannot download from Canva. Then Claude cuts, animates and re-records the clips (about a day).
 - [ ] **Accounts.** Make the X account and Telegram group (copy in `LAUNCH_KIT.md`). Turn on 2FA on both.
 - [ ] **Domain: blobsquatch.com** (bought on Hostinger). In Hostinger DNS add: `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `distractedtremp.github.io`.
 - [ ] **GitHub Pages.** The repo is private, and Pages on a free account needs a public repo, so first: repo Settings → General → scroll to "Danger Zone" → Change visibility → Public (the site is public anyway, and nothing secret is in the repo). While there, set the default branch to `main`. Pages creates a `github-pages` environment that only lets the default branch deploy, so if the deploy workflow fails in 3 seconds with no steps, go to Settings → Environments → github-pages → Deployment branches and add `main`. Then Settings → Pages (the repo's own settings, at github.com/distractedtremp/Blobsquatch/settings/pages, not the account-level Pages page) → Source: "GitHub Actions". Then type `blobsquatch.com` under "Custom domain", wait for the DNS check, and tick "Enforce HTTPS". The repo already has the CNAME file.
@@ -23,7 +24,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [x] CNAME file, blobsquatch.com, @BlobsquatchNEAR and t.me/blobsquatch wired into the site and kit.
 - [ ] Virgin-vs-Chad meme and sticker crops.
 - [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
-- [ ] NEAR-first copy and the sighting log on the site (draft in `BRAND_STORY.md`, needs Guy's OK).
+- [x] NEAR-first copy and the sighting log on the site (live 2026-10-26; the tally is the `SIGHTINGS` constant in `index.html`, update it by hand from the #BlobsquatchForGTA6 count).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.
 - [ ] After launch: add the buy link to every "Buy $BLOBSQUATCH" button.
 

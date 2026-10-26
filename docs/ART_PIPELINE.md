@@ -81,3 +81,26 @@ The scripts are in `tools/`. They have hard-coded paths from the old workspace, 
 ## Style exploration (2026-10-26, text-only prompts, Canva)
 
 Full-res flat-cartoon passes the owner downloaded: `art/candidates/flat-cartoon/` (Barry with camera, Blobsquatch sneaking). The owner asked to see the sneaking pose in other styles: comic book `MAHZFfbRmnQ`, pop art `MAHZFYeEXa8`, graffiti `MAHZFU2r5zY`, game-cover cel-shade `MAHZFbLO690`, superhero comic cover `MAHZFYcIfDI`. Note: in dark, rendered styles the cone mask stops reading as Bigfoot and starts reading as a pointed hood; the shaggy zigzag fur edge is what sells it, so keep it big in any style.
+
+## The clean-meme set (2026-10-26, Canva, chosen by Claude while the owner was away)
+
+Style: see the top of `STYLE_RULES.md`. Method that held consistency: generate one proof pass text-only, then pass that image as the reference for every other pose ("use the reference image for the exact character design and art style ... draw a new image: <pose>"). Barry the same way from his own base pose.
+
+| Pose | Site key | Canva media id | Link |
+|---|---|---|---|
+| Front, mask on, sly glance (the reference for the set) | front | MAHZHGDKr2Y | https://www.canva.com/M/MAHZHGDKr2Y |
+| Back walk-away, sole showing | back, backM (mirror) | MAHZHOvJ264 | https://www.canva.com/M/MAHZHOvJ264 |
+| Look back over shoulder | look, lookM (mirror) | MAHZHBK-jOw | https://www.canva.com/M/MAHZHBK-jOw |
+| Mask held, goofy smirk | held | MAHZHOhnRUA | https://www.canva.com/M/MAHZHOhnRUA |
+| Dance, knee up, fist up | danceA, danceB (mirror) | MAHZHPgZMvA | https://www.canva.com/M/MAHZHPgZMvA |
+| Dance squat | squat | MAHZHK5vhoE | https://www.canva.com/M/MAHZHK5vhoE |
+| Frozen, holding the mask on | frozen | MAHZHLzYL3s | https://www.canva.com/M/MAHZHLzYL3s |
+| Barry squinting, camera at chest (Barry reference) | barry-watch | MAHZHOjuZYI | https://www.canva.com/M/MAHZHOjuZYI |
+| Barry aiming the camera | barry-aim | MAHZHMWPx7g | https://www.canva.com/M/MAHZHMWPx7g |
+| Barry elated jump | barry-elated | MAHZHOKUJM0 | https://www.canva.com/M/MAHZHOKUJM0 |
+| Barry asleep in the camp chair | barry-sleep | MAHZHMsyOB0 | https://www.canva.com/M/MAHZHMsyOB0 |
+| Scenery sheet (3 pines, dead tree, 2 ferns, moon, twig, 3 grass tufts, camp chair) | scenery | MAHZHJXXu_8 | https://www.canva.com/M/MAHZHJXXu_8 |
+
+Known weak spots, judged from thumbnails only: the mask reads more like a pointed fur hood than a shaggy Bigfoot head (the fur around the face is thin); the mask-held face is dorky but his hair/eyes vary from the masked poses. Regenerate those two if the owner wants, with the same reference.
+
+**Blocked on the owner:** Claude cannot download full-resolution Canva images from this environment (the proxy blocks media.canva.com). The owner downloads the keepers from the links above into `art/candidates/clean-meme/` (any names), then Claude cuts them with `tools/boil.py`, builds `img/sq/`, adds Barry and scenery sprites, and re-records the clips.
