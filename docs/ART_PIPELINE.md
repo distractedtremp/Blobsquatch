@@ -77,3 +77,7 @@ The scripts are in `tools/`. They have hard-coded paths from the old workspace, 
 - `tools/spec_shots.js`: the Playwright script that produced `screenshots/`. It shows how to wrap the file (doctype + `[hidden]` rule), force states (`pct`, `S.mode`) and screenshot every scene.
 - `tools/rec.js`: records the pump scene to video with Playwright `recordVideo`. Crop and convert with ffmpeg, e.g. `ffmpeg -i in.webm -vf crop=968:600:16:44 out.mp4`.
 - Run with Node and Playwright. On a normal machine, `npm i playwright && npx playwright install chromium`. The old sandbox used a fixed Chromium path, so edit `executablePath` in the scripts.
+
+## Style exploration (2026-10-26, text-only prompts, Canva)
+
+Full-res flat-cartoon passes the owner downloaded: `art/candidates/flat-cartoon/` (Barry with camera, Blobsquatch sneaking). The owner asked to see the sneaking pose in other styles: comic book `MAHZFfbRmnQ`, pop art `MAHZFYeEXa8`, graffiti `MAHZFU2r5zY`, game-cover cel-shade `MAHZFbLO690`, superhero comic cover `MAHZFYcIfDI`. Note: in dark, rendered styles the cone mask stops reading as Bigfoot and starts reading as a pointed hood; the shaggy zigzag fur edge is what sells it, so keep it big in any style.
