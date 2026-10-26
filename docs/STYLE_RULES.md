@@ -26,3 +26,7 @@ The target is the look of late-90s Cartoon Network cel animation, Ed, Edd n Eddy
 - Every AI pass (Canva and Gemini) came back as a detailed illustration: shading, plaid, hair strands, stubble texture, realistic eyes. See `art/history/barry-gemini-too-detailed.jpeg` for a typical fail. The generator drifts toward detail no matter the wording.
 - The locked images in `art/locked/` are closer, but their fur texture, soft mask face and semi-real eyes still break rules 1, 3 and 4.
 - The honest path: the owner (an artist) draws the character, Barry and the scenery by hand in this style; Claude cuts, boils and animates. AI passes are only for quick layout ideas.
+
+## What finally worked (2026-10-26, Canva)
+
+Dropping the image reference entirely and describing the style in words ("late-1990s Cartoon Network TV cartoon cel, completely flat solid colors, thick uneven black ink outlines fat outside and thin inside, only five colors plus black, rubbery wrong proportions, extreme pose") produced passes that are close to the bar: Barry `MAHZFdrbCm8`, Blobsquatch sneaking `MAHZFUpNnVs`. The image reference was what dragged every earlier pass back toward detailed illustration. Keep consistency by describing the character fully in words each time, and compare each result to the stills.
