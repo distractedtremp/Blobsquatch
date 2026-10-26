@@ -7,7 +7,7 @@ A regular, fictional guy in his 30s wearing a cheap brown Bigfoot costume, fakin
 - **No personal name.** He's just "Blobsquatch." **Barry** is the photographer, not him.
 - **From far away** he must pass as a classic Bigfoot. **Up close** it's obviously a costume.
 - **Personality (updated 2026-10-26):** a trickster. He is fooling people and enjoying it, so the face reads sly and a little devious: half-lidded eyes, pupils in a sideways glance, angled brows, a crooked smirk, in the way a scheming 90s-cartoon character would. **Not bored, not deadpan, not angry.** Zero shame ("yeah, it's me, so what"). Not sassy, not sad, not gross or disheveled.
-- **Face style:** flat and heavy-outlined like the body. Big flat white cartoon eye ovals with dot pupils and a thick lid line. No realistic eyes, no skin tint around the eyes, no stubble texture (a few pen dots at most). The soft airbrushed mask face and semi-real eyes in the current locked images read as uncanny and are being replaced.
+- **Face style:** flat and heavy-outlined like the body. Big flat white cartoon eye ovals with dot pupils and a thick lid line. No realistic eyes, no stubble texture (a few pen dots at most). Peach skin DOES show in a ring around each eye inside the eye holes; that is the tell that there's a guy in there, and it stays. The soft airbrushed mask face and semi-real eyes in the current locked images read as uncanny and are being replaced.
 - **His only "special" traits:** NEARsighted (glasses off under the mask) and agile/elusive (he can't let you get close).
 
 ## Locked images (`art/locked/`)

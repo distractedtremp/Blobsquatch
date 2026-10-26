@@ -18,6 +18,7 @@ The target is the look of late-90s Cartoon Network cel animation, Ed, Edd n Eddy
 - Far away he reads as a convincing blurry Bigfoot; up close, obviously a guy in a suit.
 - He is a **sly trickster**, not deadpan: sideways glance, half-lidded eyes, a crooked smirk.
 - The mask is a Bigfoot head (cone top, shaggy zigzag fur edge, small flat face), not a gorilla, not a hood.
+- **Skin shows inside the eye holes.** A ring of peach human skin around each eye, with the mask's gray face around that. It is the tell that someone is in there (owner's call, 2026-10-26). Draw it cartoon-flat; the earlier problem was realistic eye rendering, not the skin.
 - NEAR green `#00EC97` on the zipper pull only.
 - Barry: bucket hat, open flannel (one red shape, no plaid), camera on a strap. In on the hoax.
 
@@ -29,4 +30,4 @@ The target is the look of late-90s Cartoon Network cel animation, Ed, Edd n Eddy
 
 ## What finally worked (2026-10-26, Canva)
 
-Dropping the image reference entirely and describing the style in words ("late-1990s Cartoon Network TV cartoon cel, completely flat solid colors, thick uneven black ink outlines fat outside and thin inside, only five colors plus black, rubbery wrong proportions, extreme pose") produced passes that are close to the bar: Barry `MAHZFdrbCm8`, Blobsquatch sneaking `MAHZFUpNnVs`. The image reference was what dragged every earlier pass back toward detailed illustration. Keep consistency by describing the character fully in words each time, and compare each result to the stills.
+Owner's pick (2026-10-26): the cel-shaded game-cover look ("GTA style"): heavy black outlines, solid colors plus one hard-edged shadow tone, no gradients. Push "scrawny, goofy, bad posture" in every prompt because the style pulls toward handsome heroes. Dropping the image reference entirely and describing the style in words ("late-1990s Cartoon Network TV cartoon cel, completely flat solid colors, thick uneven black ink outlines fat outside and thin inside, only five colors plus black, rubbery wrong proportions, extreme pose") produced passes that are close to the bar: Barry `MAHZFdrbCm8`, Blobsquatch sneaking `MAHZFUpNnVs`. The image reference was what dragged every earlier pass back toward detailed illustration. Keep consistency by describing the character fully in words each time, and compare each result to the stills.
