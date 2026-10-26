@@ -12,7 +12,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [ ] **Wallet.** Make a fresh NEAR wallet for the project (Meteor or HOT). Fund it with enough NEAR for the launch fee plus your own first buy. Write the seed phrase down on paper; never paste it into any chat, including this one.
 - [ ] **Venue.** Pick JustHoot or Meme.Cooking (see the audit doc). Open the create-token page once before launch day to see the fee and the fields.
 - [ ] **Accounts live before the launch.** X and Telegram exist with the bio, banner and pinned post, even if they have no followers yet.
-- [ ] **Date.** Any weekday, 2 to 4 pm US Eastern, when the NEAR Twitter crowd is awake.
+- [ ] **Date.** Target November 10 to 12, 2026 (a weekday, 2 to 4 pm US Eastern), so the coin has a week of life before GTA 6 lands on November 19 and the sighting-petition bit peaks. See `BRAND_STORY.md`.
 - [ ] **The first two weeks after launch.** One post a day from the kit. Reply under every big NEAR account's posts with a blurry photo. Follow and reply to 20 NEAR meme accounts a day. This replaces the warm-up.
 - [ ] **Ads.** Skip paid ads at first; replies and memes outperform them for meme coins. If anything, pay a NEAR meme account for one post after the chart has a few days of life.
 
@@ -23,6 +23,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [x] CNAME file, blobsquatch.com, @BlobsquatchNEAR and t.me/blobsquatch wired into the site and kit.
 - [ ] Virgin-vs-Chad meme and sticker crops.
 - [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
+- [ ] NEAR-first copy and the sighting log on the site (draft in `BRAND_STORY.md`, needs Guy's OK).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.
 - [ ] After launch: add the buy link to every "Buy $BLOBSQUATCH" button.
 
