@@ -88,19 +88,19 @@ Style: see the top of `STYLE_RULES.md`. Method that held consistency: generate o
 
 | Pose | Site key | Canva media id | Link |
 |---|---|---|---|
-| Front, mask on, sly glance (the reference for the set) | front | MAHZHGDKr2Y | https://www.canva.com/M/MAHZHGDKr2Y |
-| Back walk-away, sole showing | back, backM (mirror) | MAHZHOvJ264 | https://www.canva.com/M/MAHZHOvJ264 |
-| Look back over shoulder | look, lookM (mirror) | MAHZHBK-jOw | https://www.canva.com/M/MAHZHBK-jOw |
-| Mask held, goofy smirk | held | MAHZHOhnRUA | https://www.canva.com/M/MAHZHOhnRUA |
-| Dance, knee up, fist up | danceA, danceB (mirror) | MAHZHPgZMvA | https://www.canva.com/M/MAHZHPgZMvA |
-| Dance squat | squat | MAHZHK5vhoE | https://www.canva.com/M/MAHZHK5vhoE |
-| Frozen, holding the mask on | frozen | MAHZHLzYL3s | https://www.canva.com/M/MAHZHLzYL3s |
+| Front, mask on, sly glance (the reference for the set, shaggy mask) | front | MAHZHGZM5r0 | https://www.canva.com/M/MAHZHGZM5r0 |
+| Back walk-away, sole showing (no zipper on the back; it is on the chest) | back, backM (mirror) | MAHZHJME-sE | https://www.canva.com/M/MAHZHJME-sE |
+| Look back over shoulder, caught | look, lookM (mirror) | MAHZHDk-GOs | https://www.canva.com/M/MAHZHDk-GOs |
+| Mask held under the arm, smug smirk | held | MAHZHBACy3c | https://www.canva.com/M/MAHZHBACy3c |
+| Dance, fist up, knee up | danceA, danceB (mirror) | MAHZHIkWPN4 | https://www.canva.com/M/MAHZHIkWPN4 |
+| Dance squat | squat | MAHZHKD56PE | https://www.canva.com/M/MAHZHKD56PE |
+| Frozen, holding the mask on, sweat drops | frozen | MAHZHN7qDsg | https://www.canva.com/M/MAHZHN7qDsg |
 | Barry squinting, camera at chest (Barry reference) | barry-watch | MAHZHOjuZYI | https://www.canva.com/M/MAHZHOjuZYI |
 | Barry aiming the camera | barry-aim | MAHZHMWPx7g | https://www.canva.com/M/MAHZHMWPx7g |
 | Barry elated jump | barry-elated | MAHZHOKUJM0 | https://www.canva.com/M/MAHZHOKUJM0 |
 | Barry asleep in the camp chair | barry-sleep | MAHZHMsyOB0 | https://www.canva.com/M/MAHZHMsyOB0 |
 | Scenery sheet (3 pines, dead tree, 2 ferns, moon, twig, 3 grass tufts, camp chair) | scenery | MAHZHJXXu_8 | https://www.canva.com/M/MAHZHJXXu_8 |
 
-Known weak spots, judged from thumbnails only: the mask reads more like a pointed fur hood than a shaggy Bigfoot head (the fur around the face is thin); the mask-held face is dorky but his hair/eyes vary from the masked poses. Regenerate those two if the owner wants, with the same reference.
+Second pass (2026-10-26, later the same day): the first Blobsquatch set (front MAHZHGDKr2Y, back MAHZHOvJ264, look MAHZHBK-jOw, held MAHZHOhnRUA, dance MAHZHPgZMvA, squat MAHZHK5vhoE, frozen MAHZHLzYL3s) had a mask that read as a pointed fur hood, which breaks the mask rule. Every Blobsquatch pose was regenerated from the shaggier-mask front (MAHZHGZM5r0) with the mask spelled out as "a Bigfoot head and not a hood" and the peach skin ring inside the eye holes, and the table above now lists only those. The old ids stay here as fallbacks. Still judged from 200 px thumbnails only: check the skin ring and the zipper at full size once downloaded. Barry and the scenery were already on style and were kept.
 
 **Blocked on the owner:** Claude cannot download full-resolution Canva images from this environment (the proxy blocks media.canva.com). The owner downloads the keepers from the links above into `art/candidates/clean-meme/` (any names), then Claude cuts them with `tools/boil.py`, builds `img/sq/`, adds Barry and scenery sprites, and re-records the clips.

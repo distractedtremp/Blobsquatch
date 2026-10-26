@@ -2,17 +2,21 @@
 
 Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come after launch, only if the coin gets traction.
 
-**Stealth launch (the owner's choice).** No countdown, no pre-launch hype. The coin appears on JustHoot and the X account starts posting the same hour. The warm-up posts in `LAUNCH_KIT.md` become the first two weeks of post-launch posts. Stealth works on a bonding curve (JustHoot) because the curve can sit and get discovered; it does not work on Meme.Cooking, whose auction needs a crowd on a set day. The risk is a silent launch that nobody finds, so the account and Telegram must be live and the posting starts the day of launch, not later.
+**Stealth launch (the owner's choice).** No countdown, no pre-launch hype. The coin appears on JustHoot and the X account starts posting the same hour. The warm-up posts in `LAUNCH_KIT.md` become the first two weeks of post-launch posts. Stealth works on JustHoot because the pool can sit and get discovered (there is no bonding curve; see launch day, step 3); it does not work on Meme.Cooking, whose auction needs a crowd on a set day. The risk is a silent launch that nobody finds, so the account and Telegram must be live and the posting starts the day of launch, not later.
 
 ## Only Guy can do these (in this order)
 
-- [ ] **Download the art keepers.** Open the twelve Canva links in `ART_PIPELINE.md` ("The clean-meme set") and download each at full size into `art/candidates/clean-meme/`. Claude cannot download from Canva. Then Claude cuts, animates and re-records the clips (about a day).
-- [ ] **Accounts.** Make the X account and Telegram group (copy in `LAUNCH_KIT.md`). Turn on 2FA on both.
-- [ ] **Domain: blobsquatch.com** (bought on Hostinger). In Hostinger DNS add: `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `distractedtremp.github.io`.
-- [ ] **GitHub Pages.** The repo is private, and Pages on a free account needs a public repo, so first: repo Settings → General → scroll to "Danger Zone" → Change visibility → Public (the site is public anyway, and nothing secret is in the repo). While there, set the default branch to `main`. Pages creates a `github-pages` environment that only lets the default branch deploy, so if the deploy workflow fails in 3 seconds with no steps, go to Settings → Environments → github-pages → Deployment branches and add `main`. Then Settings → Pages (the repo's own settings, at github.com/distractedtremp/Blobsquatch/settings/pages, not the account-level Pages page) → Source: "GitHub Actions". Then type `blobsquatch.com` under "Custom domain", wait for the DNS check, and tick "Enforce HTTPS". The repo already has the CNAME file.
+- [ ] **Download the art keepers.** Open the Canva links in `ART_PIPELINE.md` ("The clean-meme set") and download each at full size into `art/candidates/clean-meme/`. Claude cannot download from Canva. Then Claude cuts, animates and re-records the clips (about a day).
+- [x] **X account.** @BlobsquatchNEAR exists (2026-10-26). Turn on 2FA. Leave the profile picture alone until the face is final; Claude will say when.
+- [ ] **Telegram group.** t.me/blobsquatch, copy in `LAUNCH_KIT.md`. Turn on 2FA.
+- [x] **Domain: blobsquatch.com** (Hostinger). DNS set 2026-10-26, live over HTTPS.
+- [x] **GitHub Pages.** Public repo, Pages on GitHub Actions, blobsquatch.com with HTTPS.
+- [ ] **Default branch.** Settings → General → set the default branch to `main`. Then Settings → Environments → github-pages → Deployment branches → add `main`. Until then merges do not auto-deploy and Claude redeploys by hand after each one.
 - [ ] **Wallet.** Make a fresh NEAR wallet for the project (Meteor, HOT or Intear). Fund it with enough NEAR for the launch fee plus your own first buy, and keep at least 0.1 NEAR spare for gas and storage (first-time token storage costs about 0.00125 NEAR). Write the 12-word seed phrase down on paper; never paste it into any chat, including this one.
-- [ ] **Venue.** Pick JustHoot or Meme.Cooking (see the audit doc). Open the create-token page once before launch day to see the fee and the fields.
-- [ ] **Accounts live before the launch.** X and Telegram exist with the bio, banner and pinned post, even if they have no followers yet.
+- [x] **Venue: JustHoot** (decided 2026-10-26; Meme.Cooking stays the fallback).
+- [ ] **Dry run.** Open JustHoot's create-token page once before launch day to see the fee and the fields. Do not submit. Note whether it says the pool's LP is locked or burned; nobody's public guide says, so the site and kit now say "whole supply in the pool" instead of "liquidity locked". If the page confirms a lock, tell Claude and the word goes back in.
+- [ ] **Accounts live before the launch.** X and Telegram carry the bio, banner and pinned post, even with no followers yet.
+- [ ] **Logo and profile picture in the final style.** Claude redraws the token logo, stickers and X profile picture from the final front pose once the keepers are downloaded; Guy uploads the X one then. The current logo is the old costume guy.
 - [ ] **Date.** Target November 10 to 12, 2026 (a weekday, 2 to 4 pm US Eastern), so the coin has a week of life before GTA 6 lands on November 19 and the sighting-petition bit peaks. See `BRAND_STORY.md`.
 - [ ] **The first two weeks after launch.** One post a day from the kit. Reply under every big NEAR account's posts with a blurry photo. Follow and reply to 20 NEAR meme accounts a day. This replaces the warm-up.
 - [ ] **Ads.** Skip paid ads at first; replies and memes outperform them for meme coins. If anything, pay a NEAR meme account for one post after the chart has a few days of life.
@@ -22,7 +26,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 - [x] Site reskinned and in the repo, deploy workflow ready.
 - [x] Logos, X banner, token metadata, bios, posts, Telegram copy.
 - [x] CNAME file, blobsquatch.com, @BlobsquatchNEAR and t.me/blobsquatch wired into the site and kit.
-- [ ] Virgin-vs-Chad meme and sticker crops.
+- [ ] Logo, stickers, Virgin-vs-Chad meme and X profile picture redone in the clean-meme style (after the keepers are downloaded).
 - [ ] Short clips of the hero snap and pump dance for X (from `tools/`).
 - [x] NEAR-first copy and the sighting log on the site (live 2026-10-26; the tally is the `SIGHTINGS` constant in `index.html`, update it by hand from the #BlobsquatchForGTA6 count).
 - [ ] After launch: paste the contract address, team wallet and DexScreener pair into the site so the chart drives the pump and dump scenes.
@@ -43,7 +47,7 @@ Plan: launch the coin and site first. NFTs, airdrop and "Get in the Suit" come a
 
 - Apply for the DexScreener profile update (logo, socials) and CoinGecko / CoinMarketCap listings.
 - Ask NEAR ecosystem accounts and NEAR Catalog to list the project.
-- Decide the airdrop size from the team allocation and the snapshot date.
+- Decide the airdrop size (from what the team bought at launch; JustHoot mints no team allocation) and the snapshot date.
 - If volume holds for a week, start the NFT collection and "Get in the Suit".
 
 ## Not legal advice
