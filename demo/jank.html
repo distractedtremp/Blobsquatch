@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blobsquatch Jank Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<style>
+/* Layout: one stage up top (night clearing, cutout squatch), a strip of switches under it, then a log of what he just did.
+   Single dark theme on purpose: this is camcorder footage at night. */
+:root{
+  --bg:#0c0e0b; --panel:#171a14; --line:#2b3024; --fg:#e9e4d3; --muted:#9a977f; --rec:#ff3b2f; --on:#d8c35a;
+  --display:'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+  --body:system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono:ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 var(--body);
+  padding-block:14px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font:400 clamp(26px,4vw,38px)/1 var(--display);letter-spacing:.02em;margin:0;text-transform:uppercase}
+header p{margin:0;color:var(--muted);max-width:60ch}
+
+/* stage */
+.stage{position:relative;width:100%;aspect-ratio:16/9;max-height:68vh;overflow:hidden;border:2px solid var(--line);
+  background:linear-gradient(#1b2633 0%,#24323f 55%,#3a3020 55.5%,#2c2416 100%)}
+.stage.grain{filter:blur(.7px) contrast(1.18) sepia(.28) saturate(.75)}
+.trees{position:absolute;left:0;right:0;top:0;height:60%;pointer-events:none}
+.ground{position:absolute;left:0;right:0;bottom:0;height:45%;background:
+  radial-gradient(ellipse at 50% 100%,#4a3b22 0,#3a2f1c 45%,transparent 72%)}
+.sq{position:absolute;left:50%;bottom:12%;height:46%;width:auto;transform-origin:50% 100%;will-change:transform;
+  image-rendering:auto;transition:none !important;user-select:none;-webkit-user-drag:none}
+.stage.crunch .sq{image-rendering:pixelated}
+.noise{position:absolute;inset:-10%;pointer-events:none;opacity:0;mix-blend-mode:overlay}
+.stage.grain .noise{opacity:.35}
+.rec{position:absolute;top:10px;left:12px;font:600 12px/1 var(--mono);letter-spacing:.14em;color:var(--rec);display:flex;gap:8px;align-items:center}
+.rec i{width:10px;height:10px;border-radius:50%;background:var(--rec);display:inline-block}
+.rec.off{color:var(--muted)}.rec.off i{background:var(--muted)}
+.hud{position:absolute;right:12px;top:10px;white-space:pre-line;font:12px/1.3 var(--mono);color:#d9d4c0;text-align:right;opacity:.85;font-variant-numeric:tabular-nums}
+
+/* controls */
+.panel{background:var(--panel);border:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row h2{font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0;min-width:7.5em}
+button,label.chip{font:14px/1 var(--body);border:1px solid var(--line);background:#0f110d;color:var(--fg);padding:9px 12px;cursor:pointer;border-radius:0}
+button:hover,label.chip:hover{border-color:var(--muted)}
+button:focus-visible,label.chip:focus-within,input[type=range]:focus-visible{outline:2px solid var(--on);outline-offset:2px}
+button.go{background:#2a2b1c;border-color:#4a4a2a}
+label.chip{display:inline-flex;align-items:center;gap:8px}
+label.chip input{margin:0;accent-color:var(--on);width:15px;height:15px}
+label.chip.on{border-color:var(--on);color:#fff}
+.range{display:inline-flex;align-items:center;gap:10px;font-variant-numeric:tabular-nums}
+.range input{width:160px;accent-color:var(--on)}
+.range output{font:13px var(--mono);min-width:5.5em;color:var(--muted)}
+
+.log{font:13px/1.5 var(--mono);color:var(--muted);margin:0;padding:0;list-style:none;min-height:9em}
+.log li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log li:first-child{color:var(--fg)}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 18px;margin:0;padding:0;list-style:none;color:var(--muted);font-size:14px}
+.rules b{color:var(--fg);font-weight:600}
+@media (max-width:520px){.range input{width:120px}.row h2{min-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Blobsquatch jank demo</h1>
+  <p>The current site squatch, moved like a cutout dragged around in MS Paint. Nothing eases. Flip each rule off to feel what it adds.</p>
+</header>
+
+<div class="stage" id="stage">
+  <svg class="trees" viewBox="0 0 1600 540" preserveAspectRatio="none" aria-hidden="true">
+    <!-- crude treeline: flat, lumpy, no detail -->
+    <path fill="#13201a" d="M0 540V300l40-70 30 60 50-110 40 90 30-50 60 120 40-140 50 100 40-60 50 130 60-160 40 110 50-40 40 90 60-120 40 80 50-70 40 130 60-150 50 120 30-60 50 100 40-120 60 130 40-60 50 90 40-130 50 120 40-70 60 120 40-110 50 90 30-40 50 110 40-150 60 140 40-70V540z"/>
+    <path fill="#0d1712" d="M0 540V400l60-90 50 110 40-70 70 140 50-120 60 100 40-50 60 90 50-130 70 150 40-80 60 100 50-60 60 120 50-150 60 130 40-60 60 100 50-110 70 130 40-70 60 100 40-40 70 110 50-120 60 120 40-80 60 100 40-50 60 90V540z"/>
+  </svg>
+  <div class="ground"></div>
+  <img class="sq" id="sq" alt="Blobsquatch" draggable="false">
+  <div class="noise" id="noise"></div>
+  <div class="rec" id="rec"><i></i>REC</div>
+  <div class="hud" id="hud"></div>
+</div>
+
+<div class="panel">
+  <div class="row">
+    <h2>Do it now</h2>
+    <button class="go" id="bTele">Teleport</button>
+    <button class="go" id="bWalk">Walk</button>
+    <button class="go" id="bFlip">Flip</button>
+    <button class="go" id="bSwap">Swap drawing</button>
+    <button class="go" id="bJit">Jitter</button>
+    <button id="bAuto">Pause auto</button>
+  </div>
+  <div class="row">
+    <h2>Rules</h2>
+    <label class="chip on"><input type="checkbox" id="oTele" checked>Teleport</label>
+    <label class="chip on"><input type="checkbox" id="oFlip" checked>Flip</label>
+    <label class="chip on"><input type="checkbox" id="oWalk" checked>Paper-doll walk</label>
+    <label class="chip on"><input type="checkbox" id="oJit" checked>Jitter</label>
+    <label class="chip on"><input type="checkbox" id="oSwap" checked>Frame swaps</label>
+    <label class="chip on"><input type="checkbox" id="oBoil" checked>Line boil</label>
+  </div>
+  <div class="row">
+    <h2>Extras</h2>
+    <label class="chip"><input type="checkbox" id="oWob">SVG wobble (extra boil)</label>
+    <label class="chip"><input type="checkbox" id="oGrain">Camcorder grain</label>
+    <label class="chip"><input type="checkbox" id="oCrunch">Crunchy pixels</label>
+    <span class="range"><label for="fps">Frame rate</label><input type="range" id="fps" min="3" max="12" value="7"><output id="fpsOut">7 fps</output></span>
+    <span class="range"><label for="pause">Pause</label><input type="range" id="pause" min="1" max="3" step="0.5" value="2"><output id="pauseOut">1 to 3 s</output></span>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="row"><h2>What he did</h2></div>
+  <ul class="log" id="log"></ul>
+</div>
+
+<ul class="rules">
+  <li><b>Teleport</b> pauses 1 to 3 s, then snaps to a new spot, often the other side.</li>
+  <li><b>Flip</b> mirrors him in one frame. No turning.</li>
+  <li><b>Walk</b> tilts the whole cutout 6° each way, 2 or 3 hops, limbs frozen.</li>
+  <li><b>Jitter</b> shakes him 2 to 4 px for a couple of frames.</li>
+  <li><b>Frame swaps</b> cut between normal, arms up, scared, mask off, look back.</li>
+  <li><b>Line boil</b> cycles 3 redrawn outlines every frame.</li>
+</ul>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wob" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence id="wobT" type="turbulence" baseFrequency="0.018" numOctaves="2" seed="1" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<script>
+// Sprites: the current site squatch cut by tools/boil.py (img/sq). Three outline variants per pose make the line boil.
+const POSES={front:'normal',danceA:'arms up',frozen:'scared',held:'mask off',look:'look back'};
+const SPR={};
+for(const k in POSES)SPR[k]=[0,1,2].map(i=>{const im=new Image();im.src=`../img/sq/${k}-${i}.webp`;return im});
+
+const $=id=>document.getElementById(id);
+const stage=$('stage'),sq=$('sq'),hud=$('hud'),logEl=$('log'),rec=$('rec'),noise=$('noise'),wobT=$('wobT');
+const opt=id=>$(id).checked;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const ri=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+// Everything lives in whole ticks. One tick = one frame at the chosen frame rate, so nothing can move between frames.
+let fps=7, tick=0, auto=true;
+const S={x:.5,face:1,tilt:0,dx:0,dy:0,jx:0,jy:0,pose:'front',boil:0,mode:'idle',wait:0,steps:0,stepT:0,jit:0,hold:0};
+const secs=s=>Math.max(1,Math.round(s*fps));
+
+function log(t){const li=document.createElement('li');li.textContent=`${(tick/fps).toFixed(1).padStart(6)}s  ${t}`;logEl.prepend(li);while(logEl.children.length>8)logEl.lastChild.remove()}
+function idle(){S.mode='idle';const p=+$('pause').value;S.wait=secs(rnd(Math.max(.5,p-1),p+1))}
+
+function teleport(){
+  const far=Math.random()<.5;          // sometimes the opposite side of the clearing
+  let nx=far?(S.x<.5?rnd(.62,.9):rnd(.1,.38)):rnd(.1,.9);
+  if(Math.abs(nx-S.x)<.12)nx=S.x<.5?S.x+.3:S.x-.3;
+  const dir=nx>S.x?1:-1;
+  if(opt('oFlip')&&Math.random()<.5&&S.face!==dir){S.face=dir}
+  log(`TELEPORT ${(S.x*100)|0}% to ${(nx*100)|0}%${far?' (opposite side)':''}`);
+  S.x=nx;S.tilt=0;idle();
+}
+function flip(){S.face*=-1;log(`FLIP ${S.face>0?'faces right':'faces left'}`);idle()}
+function walk(){S.mode='walk';S.steps=ri(2,3);S.stepT=0;log(`WALK ${S.steps} hops ${S.face>0?'right':'left'}`)}
+function swap(force){
+  const keys=Object.keys(POSES).filter(k=>k!==S.pose&&(force||k!=='front'));
+  const k=pick(keys);S.pose=k;S.mode='hold';S.hold=secs(rnd(.6,1.6));
+  log(`SWAP ${POSES[k]} for ${(S.hold/fps).toFixed(1)}s`)
+}
+function jitter(){S.jit=ri(2,3);log('JITTER')}
+
+function act(){
+  const bag=[];
+  if(opt('oTele'))bag.push(teleport,teleport,teleport);
+  if(opt('oWalk'))bag.push(walk,walk);
+  if(opt('oFlip'))bag.push(flip);
+  if(opt('oSwap'))bag.push(swap);
+  if(!bag.length){idle();return}
+  pick(bag)();
+}
+
+function step(){
+  tick++;
+  if(opt('oBoil'))S.boil=(S.boil+1)%3;
+  if(opt('oWob'))wobT.setAttribute('seed',tick%17);
+  if(opt('oGrain'))noise.style.backgroundPosition=`${ri(-80,80)}px ${ri(-80,80)}px`;
+
+  // jitter rides on top of whatever else is happening
+  if(S.jit>0){S.jit--;S.jx=(Math.random()<.5?-1:1)*rnd(2,4);S.jy=(Math.random()<.5?-1:1)*rnd(1,3)}
+  else if(S.jx||S.jy){S.jx=S.jy=0}
+  else if(opt('oJit')&&S.mode!=='walk'&&Math.random()<.035)jitter();
+
+  if(S.mode==='idle'){S.wait--;if(S.wait<=0){if(auto)act();else idle()}}
+  else if(S.mode==='hold'){S.hold--;if(S.hold<=0){S.pose='front';idle()}}
+  else if(S.mode==='walk'){
+    // each hop holds two frames: tilt and lift, then land. Limbs never move; the whole drawing tips over like cardboard.
+    if(S.stepT%2===0){
+      const n=S.stepT/2;S.tilt=(n%2?-1:1)*rnd(5,6)*S.face;
+      S.x+=S.face*rnd(9,13)/stage.clientWidth;S.dy=-rnd(3,5);
+      if(S.x<.06||S.x>.94){S.x=Math.min(.94,Math.max(.06,S.x))}
+    }else S.dy=0;
+    S.stepT++;
+    if(S.stepT>=S.steps*2){S.tilt=0;S.dy=0;idle()}
+  }
+  draw();
+  setTimeout(step,1000/fps);
+}
+
+function draw(){
+  const im=SPR[S.pose][opt('oBoil')?S.boil:0];
+  if(sq.src!==im.src)sq.src=im.src;
+  sq.style.left=(S.x*100)+'%';
+  sq.style.transform=`translate(-50%,0) translate(${(S.dx+S.jx)|0}px,${(S.dy+S.jy)|0}px) scaleX(${S.face}) rotate(${S.tilt.toFixed(1)}deg)`;
+  sq.style.filter=opt('oWob')?'url(#wob)':'';
+  hud.textContent=`${fps} fps  frame ${tick}\n${POSES[S.pose]}  tilt ${S.tilt.toFixed(0)}°  x ${(S.x*100)|0}%`;
+  stage.classList.toggle('grain',opt('oGrain'));
+  stage.classList.toggle('crunch',opt('oCrunch'));
+}
+
+// camcorder grain: one tile of noise, jumped to a new offset every frame
+(function(){const c=document.createElement('canvas');c.width=c.height=160;const g=c.getContext('2d');const d=g.createImageData(160,160);
+  for(let i=0;i<d.data.length;i+=4){const v=ri(40,215);d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+  g.putImageData(d,0,0);noise.style.background=`url(${c.toDataURL()})`})();
+
+// controls
+$('bTele').onclick=teleport;$('bWalk').onclick=()=>{if(S.mode!=='walk')walk()};$('bFlip').onclick=flip;$('bSwap').onclick=()=>swap(true);$('bJit').onclick=jitter;
+$('bAuto').onclick=()=>{auto=!auto;$('bAuto').textContent=auto?'Pause auto':'Resume auto';rec.classList.toggle('off',!auto);log(auto?'AUTO on':'AUTO off (buttons still work)')};
+$('fps').oninput=e=>{fps=+e.target.value;$('fpsOut').textContent=`${fps} fps`};
+$('pause').oninput=e=>{const p=+e.target.value;$('pauseOut').textContent=`${Math.max(.5,p-1)} to ${p+1} s`};
+document.querySelectorAll('label.chip input').forEach(i=>i.addEventListener('change',()=>i.parentElement.classList.toggle('on',i.checked)));
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){auto=false;$('bAuto').textContent='Resume auto';rec.classList.add('off')}
+
+sq.src=SPR.front[0].src;
+idle();log('standing there');
+step();
+</script>
+</body>
+</html>
